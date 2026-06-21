@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SupplierEval Pro</title>
-<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Sarabun',sans-serif;background:#f5f4f0;color:#1a1a1a;min-height:100vh}
@@ -18,14 +18,14 @@ body{font-family:'Sarabun',sans-serif;background:#f5f4f0;color:#1a1a1a;min-heigh
 .nav-btn.active,.nav-btn:hover{background:rgba(255,255,255,0.2);color:#fff}
 .key-bar{background:#fff7f2;border-bottom:1px solid #f0c5a0;padding:7px 20px;display:flex;align-items:center;gap:8px}
 .key-bar label{font-size:12px;color:#993C1D;white-space:nowrap}
-.key-bar input{flex:1;max-width:320px;padding:5px 10px;border:1px solid #f0c5a0;border-radius:6px;font-size:12px;font-family:'Sarabun',sans-serif;color:#4A1B0C;background:#fff}
+.key-bar input[type=password]{flex:1;max-width:300px;padding:5px 10px;border:1px solid #f0c5a0;border-radius:6px;font-size:12px;font-family:'Sarabun',sans-serif;color:#4A1B0C;background:#fff}
 .key-bar input:focus{outline:none;border-color:#D85A30}
 .key-status{font-size:11px;padding:3px 10px;border-radius:999px}
 .key-ok{background:#EAF3DE;color:#27500A}
 .key-no{background:#FAECE7;color:#993C1D}
 .main{display:grid;grid-template-columns:1fr 320px;min-height:calc(100vh - 94px)}
 .form-panel{padding:20px;overflow-y:auto}
-.result-panel{background:#fff;border-left:1px solid #f0e8e0;padding:18px;display:flex;flex-direction:column;gap:14px;overflow-y:auto}
+.result-panel{background:#fff;border-left:1px solid #f0e8e0;padding:18px;display:flex;flex-direction:column;gap:12px;overflow-y:auto}
 .sec-label{font-size:12px;font-weight:600;color:#993C1D;letter-spacing:.04em;margin-bottom:10px}
 .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px}
 .field{display:flex;flex-direction:column;gap:3px}
@@ -41,14 +41,15 @@ body{font-family:'Sarabun',sans-serif;background:#f5f4f0;color:#1a1a1a;min-heigh
 .crit-slider::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:#D85A30;cursor:pointer;border:3px solid #fff;box-shadow:0 0 0 1px #D85A30}
 .crit-slider::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:#D85A30;cursor:pointer;border:3px solid #fff}
 .crit-val{font-size:16px;font-weight:700;color:#D85A30;min-width:22px;text-align:right}
-.crit-desc{font-size:11px;color:#bbb;margin-top:3px}
-.remark{width:100%;padding:9px 10px;border:1px solid #e0dbd4;border-radius:8px;font-size:13px;font-family:'Sarabun',sans-serif;resize:vertical;min-height:64px;margin-bottom:16px;color:#1a1a1a}
+.crit-comment{width:100%;margin-top:8px;padding:6px 9px;border:1px solid #f0e8e0;border-radius:6px;font-size:12px;font-family:'Sarabun',sans-serif;color:#1a1a1a;background:#fafaf9;resize:none;min-height:48px;line-height:1.5}
+.crit-comment:focus{outline:none;border-color:#D85A30;background:#fff}
+.crit-comment::placeholder{color:#ccc}
+.remark{width:100%;padding:9px 10px;border:1px solid #e0dbd4;border-radius:8px;font-size:13px;font-family:'Sarabun',sans-serif;resize:vertical;min-height:60px;margin-bottom:16px;color:#1a1a1a}
 .remark:focus{outline:none;border-color:#D85A30}
-.eval-btn{width:100%;padding:13px;background:#D85A30;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:600;font-family:'Sarabun',sans-serif;cursor:pointer;transition:background .15s}
+.eval-btn{width:100%;padding:13px;background:#D85A30;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:600;font-family:'Sarabun',sans-serif;cursor:pointer}
 .eval-btn:hover{background:#b84a24}
-.eval-btn:active{transform:scale(.98)}
-.score-wrap{text-align:center;padding:10px 0 4px}
-.score-ring{width:90px;height:90px;border-radius:50%;border:4px solid #e0dbd4;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 8px;transition:border-color .4s}
+.score-wrap{text-align:center;padding:8px 0 2px}
+.score-ring{width:88px;height:88px;border-radius:50%;border:4px solid #e0dbd4;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 8px;transition:border-color .4s}
 .score-ring.high{border-color:#639922}
 .score-ring.mid{border-color:#EF9F27}
 .score-ring.low{border-color:#E24B4A}
@@ -75,10 +76,13 @@ body{font-family:'Sarabun',sans-serif;background:#f5f4f0;color:#1a1a1a;min-heigh
 .ai-lbl{font-size:12px;font-weight:600;color:#993C1D}
 .ai-text{font-size:13px;color:#4A1B0C;line-height:1.7}
 .ai-hint{font-size:12px;color:#bbb;font-style:italic}
+.pdf-row{display:flex;gap:6px}
+.pdf-btn{flex:1;padding:8px 6px;border:1px solid #f0c5a0;border-radius:8px;font-size:11px;font-family:'Sarabun',sans-serif;color:#993C1D;background:#fff7f2;cursor:pointer;font-weight:500}
+.pdf-btn:hover{background:#FAECE7}
 .exp-row{display:flex;gap:6px}
-.exp-btn{flex:1;padding:8px;border:1px solid #e0dbd4;border-radius:8px;font-size:12px;font-family:'Sarabun',sans-serif;color:#666;background:#fff;cursor:pointer}
+.exp-btn{flex:1;padding:7px;border:1px solid #e0dbd4;border-radius:8px;font-size:12px;font-family:'Sarabun',sans-serif;color:#666;background:#fff;cursor:pointer}
 .exp-btn:hover{border-color:#D85A30;color:#D85A30}
-#page-history,#page-compare{display:none;padding:20px}
+#page-history,#page-compare,#page-settings{display:none;padding:20px}
 .pg-title{font-size:15px;font-weight:600;margin-bottom:14px}
 .empty-msg{text-align:center;padding:50px 20px;color:#bbb;font-size:14px}
 .hist-card{background:#fff;border:1px solid #f0e8e0;border-radius:10px;padding:13px;margin-bottom:8px;cursor:pointer}
@@ -93,6 +97,19 @@ body{font-family:'Sarabun',sans-serif;background:#f5f4f0;color:#1a1a1a;min-heigh
 .cmp-score{font-size:28px;font-weight:700;color:#D85A30}
 .cmp-row{display:flex;justify-content:space-between;font-size:11px;color:#888;padding:2px 0}
 .cmp-row span:last-child{color:#D85A30;font-weight:600}
+.settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:720px}
+.setting-section{background:#fff;border:1px solid #f0e8e0;border-radius:12px;padding:16px}
+.setting-section-title{font-size:13px;font-weight:600;color:#993C1D;margin-bottom:12px}
+.setting-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;gap:10px}
+.setting-lbl{font-size:13px;color:#1a1a1a}
+.setting-desc{font-size:11px;color:#aaa;margin-top:1px}
+.s-input{width:64px;padding:5px 8px;border:1px solid #e0dbd4;border-radius:6px;font-size:14px;font-weight:600;text-align:center;font-family:'Sarabun',sans-serif;color:#D85A30}
+.s-input:focus{outline:none;border-color:#D85A30}
+.org-input{width:100%;padding:7px 10px;border:1px solid #e0dbd4;border-radius:8px;font-size:13px;font-family:'Sarabun',sans-serif;margin-bottom:8px;color:#1a1a1a}
+.org-input:focus{outline:none;border-color:#D85A30}
+.save-btn{padding:9px 22px;background:#D85A30;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;font-family:'Sarabun',sans-serif;cursor:pointer;margin-top:14px}
+.save-btn:hover{background:#b84a24}
+.save-ok{font-size:12px;color:#27500A;margin-left:10px;display:none}
 </style>
 </head>
 <body>
@@ -100,21 +117,19 @@ body{font-family:'Sarabun',sans-serif;background:#f5f4f0;color:#1a1a1a;min-heigh
 <div class="topbar">
   <div class="brand">
     <div class="brand-icon">📊</div>
-    <div>
-      <div class="brand-name">SupplierEval Pro</div>
-      <div class="brand-sub">AI-Powered Supplier Scoring</div>
-    </div>
+    <div><div class="brand-name">SupplierEval Pro</div><div class="brand-sub">AI-Powered Supplier Scoring</div></div>
   </div>
   <div class="nav">
     <button class="nav-btn active" onclick="showPage('eval')">ประเมินใหม่</button>
     <button class="nav-btn" onclick="showPage('history')">ประวัติ (<span id="hist-count">0</span>)</button>
     <button class="nav-btn" onclick="showPage('compare')">เปรียบเทียบ</button>
+    <button class="nav-btn" onclick="showPage('settings')">⚙️ Settings</button>
   </div>
 </div>
 
 <div class="key-bar">
   <label>🔑 API Key (ไม่บังคับ):</label>
-  <input type="password" id="api-key" placeholder="sk-ant-... (ถ้าไม่มีระบบใช้ตัวอย่างแทน)" oninput="checkKey()">
+  <input type="password" id="api-key" placeholder="sk-ant-... (ถ้าไม่มีใช้ข้อความตัวอย่างแทน)" oninput="checkKey()">
   <span class="key-status key-no" id="key-status">ไม่มี key — ใช้ข้อความตัวอย่าง</span>
 </div>
 
@@ -125,28 +140,28 @@ body{font-family:'Sarabun',sans-serif;background:#f5f4f0;color:#1a1a1a;min-heigh
       <div class="info-grid">
         <div class="field"><label>ชื่อบริษัท</label><input id="f-name" type="text" placeholder="เช่น บ.ไทยโลจิสติกส์ จำกัด"></div>
         <div class="field"><label>ประเภท</label>
-          <select id="f-type">
-            <option>3PL / ขนส่ง</option><option>ผู้ผลิต / วัตถุดิบ</option>
-            <option>คลังสินค้า / Warehouse</option><option>IT / Software</option><option>อื่นๆ</option>
-          </select>
+          <select id="f-type"><option>3PL / ขนส่ง</option><option>ผู้ผลิต / วัตถุดิบ</option><option>คลังสินค้า / Warehouse</option><option>IT / Software</option><option>อื่นๆ</option></select>
         </div>
         <div class="field"><label>ประเทศ</label><input id="f-country" type="text" placeholder="ไทย"></div>
-        <div class="field"><label>ปีที่เริ่มร่วมงาน</label><input id="f-year" type="number" placeholder="2022" min="2000" max="2030"></div>
+        <div class="field"><label>ปีที่เริ่มร่วมงาน</label><input id="f-year" type="number" placeholder="2022"></div>
       </div>
       <div class="sec-label">เกณฑ์การประเมิน (1 = น้อยที่สุด → 5 = ดีที่สุด)</div>
       <div id="crit-list"></div>
-      <div class="sec-label" style="margin-top:4px">หมายเหตุ</div>
-      <textarea class="remark" id="f-remark" placeholder="บันทึกข้อสังเกตเพิ่มเติม..."></textarea>
+      <div class="sec-label" style="margin-top:4px">หมายเหตุภาพรวม</div>
+      <textarea class="remark" id="f-remark" placeholder="บันทึกข้อสังเกตภาพรวมเพิ่มเติม..."></textarea>
+      <div class="sec-label">ผู้ประเมิน</div>
+      <div class="info-grid" style="margin-bottom:16px">
+        <div class="field"><label>ชื่อ-นามสกุล</label><input id="f-evaluator" type="text" placeholder="เช่น นายวีรวิชญ์ เลิศไทยตระกูล"></div>
+        <div class="field"><label>ตำแหน่ง</label><input id="f-position" type="text" placeholder="เช่น ผู้ช่วยคณบดี"></div>
+      </div>
       <button class="eval-btn" onclick="runEval()">🤖 ประเมินและให้ AI วิเคราะห์</button>
     </div>
 
     <div class="result-panel">
       <div class="score-wrap">
-        <div class="score-ring" id="score-ring">
-          <div class="score-num" id="score-num">—</div>
-          <div class="score-denom">/ 100</div>
-        </div>
+        <div class="score-ring" id="score-ring"><div class="score-num" id="score-num">—</div><div class="score-denom">/ 100</div></div>
         <div id="verdict-wrap" style="margin-top:4px"></div>
+        <div id="db-warn" style="margin-top:6px;font-size:11px;color:#791F1F;display:none">⚠️ Deal-breaker: เกณฑ์ได้ 1 → Rejected ทันที</div>
       </div>
       <div class="bk-box">
         <div class="bk-title">คะแนนแต่ละเกณฑ์</div>
@@ -158,256 +173,426 @@ body{font-family:'Sarabun',sans-serif;background:#f5f4f0;color:#1a1a1a;min-heigh
         </svg>
       </div>
       <div class="ai-box">
-        <div class="ai-head">
-          <div class="ai-dot" id="ai-dot"></div>
-          <div class="ai-lbl">AI Analysis</div>
-        </div>
+        <div class="ai-head"><div class="ai-dot" id="ai-dot"></div><div class="ai-lbl">AI Analysis</div></div>
         <div id="ai-out"><div class="ai-hint">กดประเมินเพื่อรับผลวิเคราะห์</div></div>
       </div>
+      <div class="pdf-row">
+        <button class="pdf-btn" onclick="exportPDF('onepage')">📄 PDF หน้าเดียว</button>
+        <button class="pdf-btn" onclick="exportPDF('full')">📋 PDF รายงานเต็ม</button>
+      </div>
       <div class="exp-row">
-        <button class="exp-btn" onclick="doExportTxt()">📄 Export .txt</button>
-        <button class="exp-btn" onclick="doExportCSV()">📊 Export .csv</button>
+        <button class="exp-btn" onclick="doExportTxt()">📝 .txt</button>
+        <button class="exp-btn" onclick="doExportCSV()">📊 .csv</button>
       </div>
     </div>
   </div>
 </div>
 
-<div id="page-history">
-  <div class="pg-title">ประวัติการประเมิน</div>
-  <div id="hist-list"></div>
-</div>
+<div id="page-history"><div class="pg-title">ประวัติการประเมิน</div><div id="hist-list"></div></div>
+<div id="page-compare"><div class="pg-title">เปรียบเทียบ Supplier</div><div id="cmp-grid" class="cmp-grid"></div></div>
 
-<div id="page-compare">
-  <div class="pg-title">เปรียบเทียบ Supplier</div>
-  <div id="cmp-grid" class="cmp-grid"></div>
+<div id="page-settings">
+  <div class="pg-title">⚙️ ตั้งค่าระบบ</div>
+  <div class="settings-grid">
+    <div class="setting-section">
+      <div class="setting-section-title">🏢 ข้อมูลองค์กร (แสดงใน PDF)</div>
+      <div class="field" style="margin-bottom:8px"><label>ชื่อองค์กร</label><input class="org-input" id="s-org" placeholder="เช่น SPU Logistics Faculty" style="margin-bottom:0"></div>
+      <div class="field" style="margin-bottom:8px"><label>แผนก / ฝ่าย</label><input class="org-input" id="s-dept" placeholder="เช่น ฝ่ายจัดซื้อและ Logistics" style="margin-bottom:0"></div>
+      <div class="field"><label>โลโก้ข้อความ (ตัวย่อ)</label><input class="org-input" id="s-logo" placeholder="เช่น SPU-LSC" style="margin-bottom:0"></div>
+    </div>
+    <div class="setting-section">
+      <div class="setting-section-title">🎯 เกณฑ์ตัดสินผล (ค่า default: 75 / 50)</div>
+      <div class="setting-row">
+        <div><div class="setting-lbl">🟢 Approved ตั้งแต่</div><div class="setting-desc">คะแนนขึ้นไป = ผ่านเกณฑ์</div></div>
+        <input class="s-input" id="s-approved" type="number" value="75" min="1" max="100">
+      </div>
+      <div class="setting-row">
+        <div><div class="setting-lbl">🟡 Conditional ตั้งแต่</div><div class="setting-desc">คะแนนขึ้นไป = มีเงื่อนไข</div></div>
+        <input class="s-input" id="s-conditional" type="number" value="50" min="1" max="100">
+      </div>
+      <div style="background:#FCEBEB;border-radius:8px;padding:10px;margin-top:4px">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px">
+          <input type="checkbox" id="s-db" style="width:16px;height:16px;accent-color:#D85A30;cursor:pointer">
+          <label for="s-db" style="font-size:13px;font-weight:600;cursor:pointer">Deal-breaker rule</label>
+        </div>
+        <div style="font-size:11px;color:#791F1F;line-height:1.5">เกณฑ์ใดได้ 1/5 → Rejected ทันที ไม่ดูคะแนนรวม</div>
+      </div>
+    </div>
+    <div class="setting-section" style="grid-column:1/-1">
+      <div class="setting-section-title">📊 น้ำหนักเกณฑ์ (รวมต้องได้ 100%) — ปรับแก้ได้</div>
+      <div id="weight-settings"></div>
+      <div style="font-size:12px;color:#aaa;margin-top:8px">รวมปัจจุบัน: <span id="weight-total" style="font-weight:600;color:#D85A30">100</span>%</div>
+    </div>
+  </div>
+  <button class="save-btn" onclick="saveSettings()">💾 บันทึกการตั้งค่า</button>
+  <span class="save-ok" id="save-ok">✓ บันทึกแล้ว</span>
 </div>
 
 <script>
-var CRIT = [
-  {key:'price',   name:'ราคา / ต้นทุน',       wt:20, desc:'ความสามารถแข่งขันด้านราคา'},
-  {key:'quality', name:'คุณภาพสินค้า/บริการ', wt:25, desc:'มาตรฐานและความสม่ำเสมอ'},
-  {key:'delivery',name:'ตรงเวลา / On-time',    wt:20, desc:'ความน่าเชื่อถือในการส่งมอบ'},
-  {key:'comms',   name:'การสื่อสาร',            wt:15, desc:'การตอบสนองและความโปร่งใส'},
-  {key:'flex',    name:'ความยืดหยุ่น',         wt:10, desc:'ปรับตัวตามความต้องการได้'},
-  {key:'cert',    name:'มาตรฐาน/ใบรับรอง',     wt:10, desc:'ISO, GMP หรือใบรับรองอื่นๆ'},
+var CRIT=[
+  {key:'price',   name:'ราคา / ต้นทุน',       wt:20,desc:'ความสามารถแข่งขันด้านราคา'},
+  {key:'quality', name:'คุณภาพสินค้า/บริการ', wt:25,desc:'มาตรฐานและความสม่ำเสมอ'},
+  {key:'delivery',name:'ตรงเวลา / On-time',    wt:20,desc:'ความน่าเชื่อถือในการส่งมอบ'},
+  {key:'comms',   name:'การสื่อสาร',            wt:15,desc:'การตอบสนองและความโปร่งใส'},
+  {key:'flex',    name:'ความยืดหยุ่น',         wt:10,desc:'ปรับตัวตามความต้องการได้'},
+  {key:'cert',    name:'มาตรฐาน/ใบรับรอง',     wt:10,desc:'ISO, GMP หรือใบรับรองอื่นๆ'},
 ];
+var CFG={approved:75,conditional:50,dealbreaker:true,org:'',dept:'',logo:'SPU'};
+var history=[];
+try{history=JSON.parse(localStorage.getItem('se_v3')||'[]');}catch(e){}
+try{var sc=JSON.parse(localStorage.getItem('se_cfg')||'{}');Object.assign(CFG,sc);}catch(e){}
+document.getElementById('hist-count').textContent=history.length;
 
-var history = [];
-try { history = JSON.parse(localStorage.getItem('se_v2') || '[]'); } catch(e){}
-document.getElementById('hist-count').textContent = history.length;
+function loadCfgUI(){
+  document.getElementById('s-approved').value=CFG.approved;
+  document.getElementById('s-conditional').value=CFG.conditional;
+  document.getElementById('s-db').checked=CFG.dealbreaker;
+  document.getElementById('s-org').value=CFG.org||'';
+  document.getElementById('s-dept').value=CFG.dept||'';
+  document.getElementById('s-logo').value=CFG.logo||'';
+  var html='';
+  CRIT.forEach(function(c){
+    html+='<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">'+
+      '<div style="flex:1;font-size:13px">'+c.name+'</div>'+
+      '<input type="number" id="ws-'+c.key+'" value="'+c.wt+'" min="0" max="100" oninput="updateWTotal()" '+
+      'style="width:60px;padding:4px 8px;border:1px solid #e0dbd4;border-radius:6px;font-size:13px;font-weight:600;color:#D85A30;text-align:center;font-family:Sarabun,sans-serif">'+
+      '<span style="font-size:12px;color:#aaa">%</span></div>';
+  });
+  document.getElementById('weight-settings').innerHTML=html;
+  updateWTotal();
+}
 
-function buildForm() {
-  var html = '';
-  CRIT.forEach(function(c) {
-    html += '<div class="crit-card">' +
-      '<div class="crit-top">' +
-        '<div class="crit-name">' + c.name + '</div>' +
-        '<div class="crit-wt">น้ำหนัก ' + c.wt + '%</div>' +
-      '</div>' +
-      '<div class="crit-row">' +
-        '<input type="range" class="crit-slider" id="sl-' + c.key + '" min="1" max="5" value="3" ' +
-        'oninput="document.getElementById(\'sv-' + c.key + '\').textContent=this.value">' +
-        '<div class="crit-val" id="sv-' + c.key + '">3</div>' +
-      '</div>' +
-      '<div class="crit-desc">' + c.desc + '</div>' +
+function updateWTotal(){
+  var t=CRIT.reduce(function(s,c){var el=document.getElementById('ws-'+c.key);return s+(el?parseInt(el.value)||0:c.wt);},0);
+  var el=document.getElementById('weight-total');el.textContent=t;el.style.color=t===100?'#639922':'#E24B4A';
+}
+
+function saveSettings(){
+  CFG.approved=parseInt(document.getElementById('s-approved').value)||75;
+  CFG.conditional=parseInt(document.getElementById('s-conditional').value)||50;
+  CFG.dealbreaker=document.getElementById('s-db').checked;
+  CFG.org=document.getElementById('s-org').value.trim();
+  CFG.dept=document.getElementById('s-dept').value.trim();
+  CFG.logo=document.getElementById('s-logo').value.trim()||'SPU';
+  CRIT.forEach(function(c){var el=document.getElementById('ws-'+c.key);if(el)c.wt=parseInt(el.value)||c.wt;});
+  try{localStorage.setItem('se_cfg',JSON.stringify(CFG));}catch(e){}
+  var ok=document.getElementById('save-ok');ok.style.display='inline';
+  buildForm();
+  setTimeout(function(){ok.style.display='none';},2000);
+}
+
+function buildForm(){
+  var html='';
+  CRIT.forEach(function(c){
+    html+='<div class="crit-card">'+
+      '<div class="crit-top"><div class="crit-name">'+c.name+'</div><div class="crit-wt">น้ำหนัก '+c.wt+'%</div></div>'+
+      '<div class="crit-row">'+
+        '<input type="range" class="crit-slider" id="sl-'+c.key+'" min="1" max="5" value="3" oninput="document.getElementById(\'sv-'+c.key+'\').textContent=this.value">'+
+        '<div class="crit-val" id="sv-'+c.key+'">3</div>'+
+      '</div>'+
+      '<textarea class="crit-comment" id="cm-'+c.key+'" rows="2" placeholder="💬 บันทึกประเด็น / เหตุการณ์จริง เช่น ส่งช้า 2 ครั้ง Q3, ขอแก้ราคาไม่ได้..."></textarea>'+
     '</div>';
   });
-  document.getElementById('crit-list').innerHTML = html;
+  document.getElementById('crit-list').innerHTML=html;
 }
 
-function getScores() {
-  return CRIT.map(function(c) {
-    var el = document.getElementById('sl-' + c.key);
-    return { key:c.key, name:c.name, wt:c.wt, score: el ? parseInt(el.value)||3 : 3 };
+function getScores(){
+  return CRIT.map(function(c){
+    var sl=document.getElementById('sl-'+c.key);
+    var cm=document.getElementById('cm-'+c.key);
+    return{key:c.key,name:c.name,wt:c.wt,score:sl?parseInt(sl.value)||3:3,comment:cm?cm.value.trim():''};
   });
 }
 
-function calcTotal(scores) {
-  return scores.reduce(function(s,c){ return s + (c.score/5)*c.wt; }, 0);
+function calcTotal(sc){return sc.reduce(function(s,c){return s+(c.score/5)*c.wt;},0);}
+
+function getVerdict(total,sc){
+  if(CFG.dealbreaker&&sc.some(function(c){return c.score===1;}))
+    return{text:'Rejected — ไม่ผ่าน (Deal-breaker)',cls:'v-rejected',ring:'low',db:true};
+  if(total>=CFG.approved) return{text:'Approved — ผ่านเกณฑ์',cls:'v-approved',ring:'high',db:false};
+  if(total>=CFG.conditional) return{text:'Conditional — มีเงื่อนไข',cls:'v-conditional',ring:'mid',db:false};
+  return{text:'Rejected — ไม่ผ่านเกณฑ์',cls:'v-rejected',ring:'low',db:false};
 }
 
-function getVerdict(t) {
-  if (t >= 75) return {text:'Approved — ผ่านเกณฑ์',   cls:'v-approved',   ring:'high'};
-  if (t >= 50) return {text:'Conditional — มีเงื่อนไข', cls:'v-conditional', ring:'mid'};
-  return          {text:'Rejected — ไม่ผ่านเกณฑ์',    cls:'v-rejected',    ring:'low'};
-}
-
-function drawRadar(scores) {
-  var cx=110, cy=100, r=62, n=scores.length;
-  function pt(i, rad) {
-    var a = (Math.PI*2*i/n) - Math.PI/2;
-    return [cx + rad*Math.cos(a), cy + rad*Math.sin(a)];
-  }
-  function poly(rad, fill, stroke, sw, opacity) {
-    var pts = [];
-    for (var i=0;i<n;i++){var p=pt(i,rad);pts.push(p[0].toFixed(1)+','+p[1].toFixed(1));}
-    return '<polygon points="'+pts.join(' ')+'" fill="'+(fill||'none')+'" '+(opacity?'fill-opacity="'+opacity+'" ':'')+
-      'stroke="'+stroke+'" stroke-width="'+sw+'"/>';
-  }
-  var svg = poly(r,'none','#f0c5a0','1');
-  svg += poly(r*0.67,'none','#f0c5a0','0.7');
-  svg += poly(r*0.33,'none','#f0c5a0','0.5');
-  for (var i=0;i<n;i++){var p=pt(i,r);svg+='<line x1="'+cx+'" y1="'+cy+'" x2="'+p[0].toFixed(1)+'" y2="'+p[1].toFixed(1)+'" stroke="#f0c5a0" stroke-width="0.7"/>';}
-  var dpts=[];
-  for (var i=0;i<n;i++){var p=pt(i,(scores[i].score/5)*r);dpts.push(p[0].toFixed(1)+','+p[1].toFixed(1));}
-  svg+='<polygon points="'+dpts.join(' ')+'" fill="#D85A30" fill-opacity="0.18" stroke="#D85A30" stroke-width="2"/>';
-  for (var i=0;i<n;i++){var p=pt(i,(scores[i].score/5)*r);svg+='<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="4" fill="#D85A30"/>';}
-  for (var i=0;i<n;i++){
+function drawRadar(sc){
+  var cx=110,cy=100,r=62,n=sc.length;
+  function pt(i,rad){var a=(Math.PI*2*i/n)-Math.PI/2;return[cx+rad*Math.cos(a),cy+rad*Math.sin(a)];}
+  function ps(rad){return sc.map(function(c,i){var p=pt(i,rad);return p[0].toFixed(1)+','+p[1].toFixed(1);}).join(' ');}
+  var s='<polygon points="'+ps(r)+'" fill="none" stroke="#f0c5a0" stroke-width="1"/>';
+  s+='<polygon points="'+ps(r*.67)+'" fill="none" stroke="#f0c5a0" stroke-width=".7"/>';
+  s+='<polygon points="'+ps(r*.33)+'" fill="none" stroke="#f0c5a0" stroke-width=".5"/>';
+  for(var i=0;i<n;i++){var p=pt(i,r);s+='<line x1="'+cx+'" y1="'+cy+'" x2="'+p[0].toFixed(1)+'" y2="'+p[1].toFixed(1)+'" stroke="#f0c5a0" stroke-width=".7"/>';}
+  var dp=sc.map(function(c,i){var p=pt(i,(c.score/5)*r);return p[0].toFixed(1)+','+p[1].toFixed(1);}).join(' ');
+  s+='<polygon points="'+dp+'" fill="#D85A30" fill-opacity=".18" stroke="#D85A30" stroke-width="2"/>';
+  sc.forEach(function(c,i){var p=pt(i,(c.score/5)*r);s+='<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="4" fill="#D85A30"/>';});
+  sc.forEach(function(c,i){
     var lp=pt(i,r+20);
-    var anchor=lp[0]<cx-8?'end':lp[0]>cx+8?'start':'middle';
-    svg+='<text x="'+lp[0].toFixed(1)+'" y="'+(lp[1]+4).toFixed(1)+'" text-anchor="'+anchor+
-      '" font-size="10" fill="#993C1D" font-family="Sarabun,sans-serif">'+scores[i].name+'</text>';
-  }
-  document.getElementById('radar-svg').innerHTML = svg;
+    var a=lp[0]<cx-8?'end':lp[0]>cx+8?'start':'middle';
+    s+='<text x="'+lp[0].toFixed(1)+'" y="'+(lp[1]+4).toFixed(1)+'" text-anchor="'+a+'" font-size="10" fill="#993C1D" font-family="Sarabun,sans-serif">'+c.name+'</text>';
+  });
+  document.getElementById('radar-svg').innerHTML=s;
+  return s;
 }
 
-function updateBreakdown(scores) {
-  var html='';
-  scores.forEach(function(c){
-    html+='<div class="bk-row"><div class="bk-lbl">'+c.name+'</div>'+
+function updateBK(sc){
+  document.getElementById('bk-rows').innerHTML=sc.map(function(c){
+    return'<div class="bk-row"><div class="bk-lbl">'+c.name+'</div>'+
       '<div class="bk-bar"><div class="bk-fill" style="width:'+((c.score/5)*100)+'%"></div></div>'+
       '<div class="bk-sc">'+c.score+'/5</div></div>';
-  });
-  document.getElementById('bk-rows').innerHTML = html;
+  }).join('');
 }
 
-async function runEval() {
-  var name   = (document.getElementById('f-name').value||'').trim()||'Supplier ไม่ระบุชื่อ';
-  var type   = document.getElementById('f-type').value;
-  var country= (document.getElementById('f-country').value||'').trim()||'ไม่ระบุ';
-  var remark = (document.getElementById('f-remark').value||'').trim();
-  var scores = getScores();
-  var total  = Math.round(calcTotal(scores));
-  var verdict= getVerdict(total);
+async function runEval(){
+  var name=(document.getElementById('f-name').value||'').trim()||'Supplier ไม่ระบุชื่อ';
+  var type=document.getElementById('f-type').value;
+  var country=(document.getElementById('f-country').value||'').trim()||'ไม่ระบุ';
+  var remark=(document.getElementById('f-remark').value||'').trim();
+  var evaluator=(document.getElementById('f-evaluator').value||'').trim();
+  var position=(document.getElementById('f-position').value||'').trim();
+  var sc=getScores();
+  var total=Math.round(calcTotal(sc));
+  var verdict=getVerdict(total,sc);
 
-  document.getElementById('score-num').textContent  = total;
-  document.getElementById('score-ring').className   = 'score-ring '+verdict.ring;
-  document.getElementById('verdict-wrap').innerHTML = '<span class="v-pill '+verdict.cls+'">'+verdict.text+'</span>';
+  document.getElementById('score-num').textContent=total;
+  document.getElementById('score-ring').className='score-ring '+verdict.ring;
+  document.getElementById('verdict-wrap').innerHTML='<span class="v-pill '+verdict.cls+'">'+verdict.text+'</span>';
+  document.getElementById('db-warn').style.display=verdict.db?'block':'none';
+  updateBK(sc); drawRadar(sc);
 
-  updateBreakdown(scores);
-  drawRadar(scores);
+  var dot=document.getElementById('ai-dot');
+  dot.className='ai-dot pulse';
+  document.getElementById('ai-out').innerHTML='<div class="ai-hint">⏳ กำลังวิเคราะห์...</div>';
 
-  var dot = document.getElementById('ai-dot');
-  dot.className = 'ai-dot pulse';
-  document.getElementById('ai-out').innerHTML = '<div class="ai-hint">⏳ กำลังวิเคราะห์...</div>';
+  var apiKey=(document.getElementById('api-key').value||'').trim();
+  var aiText='';
+  var lines=sc.map(function(c){return c.name+': '+c.score+'/5 ('+c.wt+'%)'+(c.comment?' → "'+c.comment+'"':'');}).join('\n');
 
-  var apiKey = (document.getElementById('api-key').value||'').trim();
-  var aiText = '';
-
-  if (apiKey && apiKey.indexOf('sk-ant-')===0) {
-    try {
-      var st = scores.map(function(c){return c.name+': '+c.score+'/5 (น้ำหนัก '+c.wt+'%)';}).join('\n');
-      var prompt = 'คุณคือผู้เชี่ยวชาญ Supply Chain\nวิเคราะห์ผลประเมิน Supplier เป็นภาษาไทย 3-4 ประโยค:\n\nชื่อ: '+name+'\nประเภท: '+type+' | ประเทศ: '+country+'\nคะแนนรวม: '+total+'/100 ('+verdict.text+')\n\n'+st+(remark?'\nหมายเหตุ: '+remark:'')+'\n\nระบุ: 1) จุดแข็ง 2) จุดที่ต้องพัฒนา 3) คำแนะนำถัดไป';
-      var res = await fetch('https://api.anthropic.com/v1/messages',{
+  if(apiKey&&apiKey.indexOf('sk-ant-')===0){
+    try{
+      var prompt='คุณคือผู้เชี่ยวชาญ Supply Chain\nวิเคราะห์ผลประเมิน Supplier เป็นภาษาไทย 4-5 ประโยค โดยอ้างอิงประเด็น comment ที่บันทึกไว้:\n\nชื่อ: '+name+'\nประเภท: '+type+' | ประเทศ: '+country+'\nคะแนนรวม: '+total+'/100 ('+verdict.text+')\n\n'+lines+(remark?'\n\nหมายเหตุภาพรวม: '+remark:'')+'\n\nโปรดระบุ: 1) จุดแข็งโดดเด่น 2) จุดอ่อนสำคัญ 3) คำแนะนำ action ถัดไป';
+      var res=await fetch('https://api.anthropic.com/v1/messages',{
         method:'POST',
         headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-        body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:400,messages:[{role:'user',content:prompt}]})
+        body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:500,messages:[{role:'user',content:prompt}]})
       });
-      var d = await res.json();
-      aiText = (d.content&&d.content[0]&&d.content[0].text) ? d.content[0].text : 'ไม่สามารถรับผลจาก AI ได้';
-    } catch(e) { aiText = '⚠️ เชื่อมต่อ API ไม่ได้: '+e.message; }
-  } else {
-    var weak   = scores.filter(function(c){return c.score<=3;}).map(function(c){return c.name;});
-    var strong = scores.filter(function(c){return c.score>=4;}).map(function(c){return c.name;});
-    aiText = '[ตัวอย่าง — ใส่ API Key เพื่อรับผลจาก Claude จริงๆ]\n\n'+
+      var d=await res.json();
+      aiText=(d.content&&d.content[0]&&d.content[0].text)?d.content[0].text:'ไม่สามารถรับผลจาก AI ได้';
+    }catch(e){aiText='⚠️ เชื่อมต่อ API ไม่ได้: '+e.message;}
+  }else{
+    var weak=sc.filter(function(c){return c.score<=2;}).map(function(c){return c.name;});
+    var strong=sc.filter(function(c){return c.score>=4;}).map(function(c){return c.name;});
+    var cm1=sc.find(function(c){return c.comment;});
+    aiText='[ตัวอย่าง — ใส่ API Key เพื่อรับผลจาก Claude จริงๆ]\n\n'+
       name+' ได้คะแนนรวม '+total+'/100 ระดับ "'+verdict.text+'" '+
       (strong.length?'จุดแข็งด้าน'+strong.join(' และ')+' ':'')+
       (weak.length?'ควรพัฒนาด้าน'+weak.join(' และ')+' ':'')+
-      'แนะนำจัดประชุม Business Review เพื่อวางแผนพัฒนาร่วมกันในไตรมาสถัดไป';
+      (cm1?'โดยเฉพาะประเด็น "'+cm1.comment+'" ที่บันทึกไว้ ':'')+
+      'แนะนำจัดประชุม Business Review และทำ SLA ร่วมกันในไตรมาสถัดไป';
   }
 
-  dot.className = 'ai-dot done';
-  document.getElementById('ai-out').innerHTML = '<div class="ai-text">'+aiText.replace(/\n/g,'<br>')+'</div>';
+  dot.className='ai-dot done';
+  document.getElementById('ai-out').innerHTML='<div class="ai-text">'+aiText.replace(/\n/g,'<br>')+'</div>';
 
-  var rec = {name:name,type:type,country:country,total:total,verdict:verdict.text,scores:scores,aiText:aiText,date:new Date().toLocaleDateString('th-TH'),remark:remark};
+  var rec={name:name,type:type,country:country,total:total,verdict:verdict.text,scores:sc,aiText:aiText,
+    date:new Date().toLocaleDateString('th-TH'),remark:remark,evaluator:evaluator,position:position,db:verdict.db};
   history.unshift(rec);
-  try{localStorage.setItem('se_v2',JSON.stringify(history));}catch(e){}
-  document.getElementById('hist-count').textContent = history.length;
+  try{localStorage.setItem('se_v3',JSON.stringify(history));}catch(e){}
+  document.getElementById('hist-count').textContent=history.length;
 }
 
-function checkKey() {
+function checkKey(){
   var k=(document.getElementById('api-key').value||'').trim();
   var st=document.getElementById('key-status');
-  if (k.indexOf('sk-ant-')===0){st.className='key-status key-ok';st.textContent='✓ API Key พร้อมใช้งาน';}
+  if(k.indexOf('sk-ant-')===0){st.className='key-status key-ok';st.textContent='✓ API Key พร้อมใช้งาน';}
   else{st.className='key-status key-no';st.textContent='ไม่มี key — ใช้ข้อความตัวอย่าง';}
 }
 
-function showPage(p) {
-  ['eval','history','compare'].forEach(function(x){
-    var el=document.getElementById('page-'+x);
-    if(el) el.style.display=(x===p)?'block':'none';
-  });
-  document.querySelectorAll('.nav-btn').forEach(function(b,i){
-    b.classList.toggle('active',['eval','history','compare'][i]===p);
-  });
-  if(p==='history') renderHistory();
-  if(p==='compare') renderCompare();
+function exportPDF(mode){
+  var name=(document.getElementById('f-name').value||'').trim()||'ไม่ระบุชื่อ';
+  var type=document.getElementById('f-type').value;
+  var country=(document.getElementById('f-country').value||'').trim()||'ไม่ระบุ';
+  var year=document.getElementById('f-year').value||'-';
+  var remark=(document.getElementById('f-remark').value||'').trim();
+  var evaluator=(document.getElementById('f-evaluator').value||'').trim()||'—';
+  var position=(document.getElementById('f-position').value||'').trim()||'—';
+  var sc=getScores(); var total=Math.round(calcTotal(sc)); var verdict=getVerdict(total,sc);
+  var aiText=document.getElementById('ai-out').innerText||'ยังไม่ได้วิเคราะห์';
+  var org=CFG.org||'องค์กรของคุณ'; var dept=CFG.dept||''; var logo=CFG.logo||'SPU';
+  var today=new Date().toLocaleDateString('th-TH',{year:'numeric',month:'long',day:'numeric'});
+  var vc=total>=CFG.approved?'#27500A':total>=CFG.conditional?'#633806':'#791F1F';
+  var vb=total>=CFG.approved?'#EAF3DE':total>=CFG.conditional?'#FAEEDA':'#FCEBEB';
+  var radarSVG=document.getElementById('radar-svg').innerHTML;
+  var rsvg='<svg viewBox="0 0 220 195" xmlns="http://www.w3.org/2000/svg" width="260" height="230">'+radarSVG+'</svg>';
+
+  var h='<!DOCTYPE html><html><head><meta charset="UTF-8">'+
+    '<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">'+
+    '<style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:Sarabun,sans-serif;background:#fff;padding:0}@page{size:A4;margin:15mm}</style></head><body>';
+
+  h+='<div style="background:#D85A30;padding:16px 22px;display:flex;justify-content:space-between;align-items:center;margin-bottom:18px">'+
+    '<div style="display:flex;align-items:center;gap:12px">'+
+      '<div style="width:40px;height:40px;border-radius:9px;background:rgba(255,255,255,0.25);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff">'+logo+'</div>'+
+      '<div><div style="font-size:15px;font-weight:700;color:#fff">Supplier Evaluation Report</div>'+
+      '<div style="font-size:11px;color:rgba(255,255,255,0.8)">'+org+(dept?' · '+dept:'')+'</div></div>'+
+    '</div>'+
+    '<div style="text-align:right"><div style="font-size:10px;color:rgba(255,255,255,0.75)">วันที่ประเมิน</div><div style="font-size:13px;font-weight:600;color:#fff">'+today+'</div></div>'+
+  '</div>';
+
+  h+='<div style="display:grid;grid-template-columns:1fr auto;gap:14px;margin-bottom:14px">'+
+    '<div style="background:#f9f7f4;border-radius:10px;padding:13px 15px">'+
+      '<div style="font-size:10px;font-weight:600;color:#993C1D;letter-spacing:.05em;margin-bottom:7px">ข้อมูล SUPPLIER</div>'+
+      '<table style="width:100%;font-size:12px"><tbody>'+
+      '<tr><td style="color:#888;padding:2px 0;width:90px">ชื่อบริษัท</td><td style="font-weight:600">'+name+'</td></tr>'+
+      '<tr><td style="color:#888;padding:2px 0">ประเภท</td><td>'+type+'</td></tr>'+
+      '<tr><td style="color:#888;padding:2px 0">ประเทศ</td><td>'+country+'</td></tr>'+
+      '<tr><td style="color:#888;padding:2px 0">ปีที่ร่วมงาน</td><td>'+year+'</td></tr>'+
+      '</tbody></table></div>'+
+    '<div style="background:'+vb+';border-radius:10px;padding:14px 18px;text-align:center;min-width:130px">'+
+      '<div style="font-size:10px;font-weight:600;color:'+vc+';margin-bottom:5px">คะแนนรวม</div>'+
+      '<div style="font-size:42px;font-weight:700;color:'+vc+';line-height:1">'+total+'</div>'+
+      '<div style="font-size:11px;color:'+vc+';margin-bottom:7px">/ 100</div>'+
+      '<div style="background:'+vc+';color:#fff;border-radius:999px;padding:3px 10px;font-size:10px;font-weight:600">'+verdict.text+'</div>'+
+    '</div></div>';
+
+  if(mode==='onepage'){
+    h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">'+
+      '<div style="background:#fff;border:1px solid #f0e8e0;border-radius:10px;padding:10px;text-align:center">'+
+        '<div style="font-size:10px;font-weight:600;color:#993C1D;margin-bottom:6px;letter-spacing:.05em">RADAR CHART</div>'+
+        rsvg+'</div>'+
+      '<div style="background:#f9f7f4;border-radius:10px;padding:12px">'+
+        '<div style="font-size:10px;font-weight:600;color:#993C1D;margin-bottom:7px;letter-spacing:.05em">คะแนนแต่ละเกณฑ์</div>'+
+        sc.map(function(c){
+          return'<div style="display:flex;align-items:center;gap:7px;margin-bottom:6px">'+
+            '<div style="font-size:11px;flex:1;color:#444">'+c.name+'</div>'+
+            '<div style="flex:1.5;height:5px;background:#e8e4dc;border-radius:3px;overflow:hidden">'+
+              '<div style="height:100%;width:'+((c.score/5)*100)+'%;background:#D85A30;border-radius:3px"></div></div>'+
+            '<div style="font-size:11px;font-weight:600;color:#D85A30;min-width:26px;text-align:right">'+c.score+'/5</div></div>';
+        }).join('')+'</div></div>';
+    h+='<div style="background:#fff7f2;border:1px solid #f0c5a0;border-radius:10px;padding:12px;margin-bottom:12px">'+
+      '<div style="font-size:10px;font-weight:600;color:#993C1D;margin-bottom:6px">🤖 AI ANALYSIS</div>'+
+      '<div style="font-size:12px;color:#4A1B0C;line-height:1.7">'+aiText+'</div></div>';
+  }else{
+    h+='<div style="background:#fff;border:1px solid #f0e8e0;border-radius:10px;padding:12px;margin-bottom:12px;text-align:center">'+
+      '<div style="font-size:10px;font-weight:600;color:#993C1D;margin-bottom:8px;letter-spacing:.05em">RADAR CHART</div>'+
+      '<div style="display:flex;justify-content:center">'+rsvg+'</div></div>';
+    h+='<div style="background:#f9f7f4;border-radius:10px;padding:13px;margin-bottom:12px">'+
+      '<div style="font-size:10px;font-weight:600;color:#993C1D;margin-bottom:8px;letter-spacing:.05em">คะแนนแต่ละเกณฑ์ + ประเด็น/ความคิดเห็น</div>'+
+      '<table style="width:100%;border-collapse:collapse">'+
+        '<thead><tr style="background:#FAECE7">'+
+          '<th style="padding:7px 9px;text-align:left;font-size:10px;color:#993C1D">เกณฑ์</th>'+
+          '<th style="padding:7px 9px;text-align:center;font-size:10px;color:#993C1D">คะแนน</th>'+
+          '<th style="padding:7px 9px;text-align:center;font-size:10px;color:#993C1D">น้ำหนัก</th>'+
+          '<th style="padding:7px 9px;text-align:left;font-size:10px;color:#993C1D">ประเด็น / หมายเหตุ</th></tr></thead><tbody>'+
+        sc.map(function(c){
+          return'<tr style="border-bottom:1px solid #f0e8e0">'+
+            '<td style="padding:6px 9px;font-size:11px">'+c.name+'</td>'+
+            '<td style="padding:6px 9px;text-align:center;font-size:12px;font-weight:600;color:#D85A30">'+c.score+'/5</td>'+
+            '<td style="padding:6px 9px;text-align:center;font-size:11px;color:#888">'+c.wt+'%</td>'+
+            '<td style="padding:6px 9px;font-size:11px;color:#555">'+(c.comment||'—')+'</td></tr>';
+        }).join('')+'</tbody></table></div>';
+    if(remark)h+='<div style="background:#f0f7ff;border:1px solid #B5D4F4;border-radius:10px;padding:11px 13px;margin-bottom:12px">'+
+      '<div style="font-size:10px;font-weight:600;color:#0C447C;margin-bottom:5px">หมายเหตุภาพรวม</div>'+
+      '<div style="font-size:12px;color:#042C53;line-height:1.6">'+remark+'</div></div>';
+    h+='<div style="background:#fff7f2;border:1px solid #f0c5a0;border-radius:10px;padding:13px;margin-bottom:14px">'+
+      '<div style="font-size:10px;font-weight:600;color:#993C1D;margin-bottom:7px">🤖 AI ANALYSIS — วิเคราะห์โดย Claude AI</div>'+
+      '<div style="font-size:12px;color:#4A1B0C;line-height:1.8">'+aiText+'</div></div>';
+  }
+
+  h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:10px;padding-top:12px;border-top:1px solid #f0e8e0">'+
+    '<div><div style="font-size:11px;color:#aaa;margin-bottom:38px">ลายมือชื่อผู้ประเมิน</div>'+
+      '<div style="border-top:1px solid #333;padding-top:5px">'+
+        '<div style="font-size:13px;font-weight:600">'+evaluator+'</div>'+
+        '<div style="font-size:11px;color:#666">'+position+'</div>'+
+        '<div style="font-size:11px;color:#aaa;margin-top:2px">วันที่: '+today+'</div></div></div>'+
+    '<div><div style="font-size:11px;color:#aaa;margin-bottom:38px">ลายมือชื่อผู้อนุมัติ</div>'+
+      '<div style="border-top:1px solid #333;padding-top:5px">'+
+        '<div style="font-size:13px;font-weight:600">.....................................</div>'+
+        '<div style="font-size:11px;color:#666">ผู้อนุมัติ / หัวหน้างาน</div>'+
+        '<div style="font-size:11px;color:#aaa;margin-top:2px">วันที่: .........................</div></div></div>'+
+  '</div>';
+  h+='<div style="text-align:center;margin-top:12px;font-size:10px;color:#ccc">สร้างโดย SupplierEval Pro · '+org+'</div>';
+  h+='</body></html>';
+
+  var w=window.open('','_blank');
+  if(w){w.document.write(h);w.document.close();setTimeout(function(){w.print();},700);}
 }
 
-function renderHistory() {
+function showPage(p){
+  ['eval','history','compare','settings'].forEach(function(x){
+    var el=document.getElementById('page-'+x);if(el)el.style.display=(x===p)?'block':'none';
+  });
+  document.querySelectorAll('.nav-btn').forEach(function(b,i){
+    b.classList.toggle('active',['eval','history','compare','settings'][i]===p);
+  });
+  if(p==='history')renderHistory();
+  if(p==='compare')renderCompare();
+  if(p==='settings')loadCfgUI();
+}
+
+function renderHistory(){
   var el=document.getElementById('hist-list');
   if(!history.length){el.innerHTML='<div class="empty-msg">ยังไม่มีประวัติ — กดประเมินก่อนเลยครับ</div>';return;}
   el.innerHTML=history.map(function(r,i){
-    return '<div class="hist-card" onclick="loadRec('+i+')">'+
+    return'<div class="hist-card" onclick="loadRec('+i+')">'+
       '<div class="hist-top"><div><div class="hist-name">'+r.name+'</div>'+
       '<div class="hist-meta">'+r.type+' · '+r.country+' · '+r.date+'</div></div>'+
       '<div><div class="hist-score">'+r.total+'</div><div style="font-size:10px;color:#aaa;text-align:right">/ 100</div></div></div>'+
-      '<div style="margin-top:7px"><span class="v-pill '+(r.total>=75?'v-approved':r.total>=50?'v-conditional':'v-rejected')+'">'+r.verdict+'</span></div>'+
-      '</div>';
+      '<div style="margin-top:7px">'+
+        '<span class="v-pill '+(r.total>=CFG.approved?'v-approved':r.total>=CFG.conditional?'v-conditional':'v-rejected')+'">'+r.verdict+'</span>'+
+        (r.evaluator?'<span style="font-size:11px;color:#aaa;margin-left:8px">ผู้ประเมิน: '+r.evaluator+'</span>':'')+
+      '</div></div>';
   }).join('');
 }
 
-function renderCompare() {
+function renderCompare(){
   var el=document.getElementById('cmp-grid');
   if(!history.length){el.innerHTML='<div class="empty-msg">ประเมิน Supplier อย่างน้อย 2 รายก่อนนะครับ</div>';return;}
   el.innerHTML=history.map(function(r){
-    return '<div class="cmp-card">'+
-      '<div class="cmp-name">'+r.name+'</div>'+
+    return'<div class="cmp-card"><div class="cmp-name">'+r.name+'</div>'+
       '<div style="font-size:11px;color:#aaa;margin-bottom:6px">'+r.type+'</div>'+
       '<div class="cmp-score">'+r.total+'</div>'+
-      '<div style="margin:5px 0"><span class="v-pill '+(r.total>=75?'v-approved':r.total>=50?'v-conditional':'v-rejected')+'" style="font-size:10px">'+r.verdict+'</span></div>'+
-      '<div class="cmp-rows">'+r.scores.map(function(c){return '<div class="cmp-row"><span>'+c.name+'</span><span>'+c.score+'/5</span></div>';}).join('')+'</div>'+
-      '</div>';
+      '<div style="margin:5px 0"><span class="v-pill '+(r.total>=CFG.approved?'v-approved':r.total>=CFG.conditional?'v-conditional':'v-rejected')+'" style="font-size:10px">'+r.verdict+'</span></div>'+
+      '<div class="cmp-rows">'+r.scores.map(function(c){return'<div class="cmp-row"><span>'+c.name+'</span><span>'+c.score+'/5</span></div>';}).join('')+'</div></div>';
   }).join('');
 }
 
-function loadRec(i) {
-  var r=history[i]; showPage('eval');
+function loadRec(i){
+  var r=history[i];showPage('eval');
   document.getElementById('f-name').value=r.name;
   document.getElementById('f-type').value=r.type;
   document.getElementById('f-country').value=r.country;
-  if(r.remark) document.getElementById('f-remark').value=r.remark;
+  if(r.remark)document.getElementById('f-remark').value=r.remark;
+  if(r.evaluator)document.getElementById('f-evaluator').value=r.evaluator;
+  if(r.position)document.getElementById('f-position').value=r.position;
   r.scores.forEach(function(c){
-    var sl=document.getElementById('sl-'+c.key);
-    var sv=document.getElementById('sv-'+c.key);
-    if(sl) sl.value=c.score;
-    if(sv) sv.textContent=c.score;
+    var sl=document.getElementById('sl-'+c.key),sv=document.getElementById('sv-'+c.key),cm=document.getElementById('cm-'+c.key);
+    if(sl)sl.value=c.score;if(sv)sv.textContent=c.score;if(cm&&c.comment)cm.value=c.comment;
   });
 }
 
-function doExportTxt() {
+function doExportTxt(){
   var name=document.getElementById('f-name').value||'Supplier';
-  var scores=getScores(); var total=Math.round(calcTotal(scores));
+  var sc=getScores();var total=Math.round(calcTotal(sc));var verdict=getVerdict(total,sc);
   var ai=document.getElementById('ai-out').innerText||'-';
-  var lines=['SupplierEval Pro — รายงานผลประเมิน',
-    'วันที่: '+new Date().toLocaleDateString('th-TH'),
+  var lines=['SupplierEval Pro — รายงานผลประเมิน','วันที่: '+new Date().toLocaleDateString('th-TH'),
     'Supplier: '+name,'ประเภท: '+document.getElementById('f-type').value,
     'ประเทศ: '+(document.getElementById('f-country').value||'-'),'',
-    'คะแนนรวม: '+total+'/100','ผลประเมิน: '+getVerdict(total).text,'',
-    'คะแนนแต่ละเกณฑ์:'].concat(scores.map(function(c){return '  '+c.name+': '+c.score+'/5 ('+c.wt+'%)';})).concat(['','AI Analysis:',ai]);
+    'คะแนนรวม: '+total+'/100','ผลประเมิน: '+verdict.text,'','คะแนนแต่ละเกณฑ์:']
+    .concat(sc.map(function(c){return'  '+c.name+': '+c.score+'/5 ('+c.wt+'%)'+(c.comment?' — '+c.comment:'');}))
+    .concat(['','AI Analysis:',ai,'','ผู้ประเมิน: '+(document.getElementById('f-evaluator').value||'-')]);
   var blob=new Blob([lines.join('\n')],{type:'text/plain;charset=utf-8'});
   var a=document.createElement('a');a.href=URL.createObjectURL(blob);
   a.download='supplier_eval_'+name.replace(/\s/g,'_')+'.txt';a.click();
 }
 
-function doExportCSV() {
+function doExportCSV(){
   var name=document.getElementById('f-name').value||'Supplier';
-  var scores=getScores(); var total=Math.round(calcTotal(scores));
-  var rows=[
-    ['ชื่อ Supplier','ประเภท','ประเทศ','คะแนนรวม','ผลประเมิน'].concat(scores.map(function(c){return c.name;})).concat(['วันที่']),
-    [name,document.getElementById('f-type').value,document.getElementById('f-country').value||'-',total,getVerdict(total).text].concat(scores.map(function(c){return c.score;})).concat([new Date().toLocaleDateString('th-TH')])
-  ];
-  var blob=new Blob(['\ufeff'+rows.map(function(r){return r.join(',');}).join('\n')],{type:'text/csv;charset=utf-8'});
+  var sc=getScores();var total=Math.round(calcTotal(sc));var verdict=getVerdict(total,sc);
+  var hdr=['ชื่อ Supplier','ประเภท','ประเทศ','คะแนนรวม','ผลประเมิน']
+    .concat(sc.map(function(c){return c.name;})).concat(sc.map(function(c){return c.name+' (comment)';})).concat(['วันที่','ผู้ประเมิน']);
+  var vals=[name,document.getElementById('f-type').value,document.getElementById('f-country').value||'-',total,verdict.text]
+    .concat(sc.map(function(c){return c.score;})).concat(sc.map(function(c){return'"'+(c.comment||'').replace(/"/g,"''")+'"';}))
+    .concat([new Date().toLocaleDateString('th-TH'),document.getElementById('f-evaluator').value||'-']);
+  var blob=new Blob(['\ufeff'+[hdr,vals].map(function(r){return r.join(',');}).join('\n')],{type:'text/csv;charset=utf-8'});
   var a=document.createElement('a');a.href=URL.createObjectURL(blob);
   a.download='supplier_eval_'+name.replace(/\s/g,'_')+'.csv';a.click();
 }
