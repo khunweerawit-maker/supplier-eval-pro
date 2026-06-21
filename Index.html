@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SupplierEval Pro</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Sarabun',sans-serif;background:#f5f4f0;color:#1a1a1a;min-height:100vh}
+/* Topbar */
+.topbar{background:#D85A30;padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:10px}
+.brand-icon{width:34px;height:34px;border-radius:8px;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:18px}
+.brand-name{font-size:15px;font-weight:600;color:#fff}
+.brand-sub{font-size:11px;color:rgba(255,255,255,0.7);margin-top:1px}
+.nav{display:flex;gap:4px}
+.nav-btn{padding:6px 14px;border-radius:999px;font-size:12px;font-family:'Sarabun',sans-serif;cursor:pointer;border:none;background:transparent;color:rgba(255,255,255,0.75)}
+.nav-btn.active{background:rgba(255,255,255,0.2);color:#fff}
+.nav-btn:hover{background:rgba(255,255,255,0.15);color:#fff}
+/* Settings bar */
+.settings-bar{background:#fff7f2;border-bottom:1px solid #f0c5a0;padding:8px 24px;display:flex;align-items:center;gap:10px}
+.settings-bar label{font-size:12px;color:#993C1D;white-space:nowrap}
+.settings-bar input{flex:1;max-width:340px;padding:5px 10px;border:1px solid #f0c5a0;border-radius:6px;font-size:12px;font-family:'Sarabun',sans-serif;color:#4A1B0C;background:#fff}
+.settings-bar input:focus{outline:none;border-color:#D85A30}
+.key-status{font-size:11px;padding:3px 10px;border-radius:999px}
+.key-ok{background:#EAF3DE;color:#27500A}
+.key-no{background:#FAECE7;color:#993C1D}
+/* Layout */
+.main{display:grid;grid-template-columns:1fr 340px;gap:0;min-height:calc(100vh - 56px - 41px)}
+/* Form Panel */
+.form-panel{padding:24px;overflow-y:auto}
+.panel-title{font-size:13px;font-weight:600;color:#993C1D;letter-spacing:0.04em;margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.panel-title svg{width:15px;height:15px;stroke:#D85A30;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+/* Info fields */
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+.field{display:flex;flex-direction:column;gap:4px}
+.field label{font-size:11px;color:#888;font-weight:500}
+.field input,.field select{padding:8px 10px;border:1px solid #e8e4dc;border-radius:8px;font-size:13px;font-family:'Sarabun',sans-serif;color:#1a1a1a;background:#fff;transition:border-color 0.15s}
+.field input:focus,.field select:focus{outline:none;border-color:#D85A30}
+/* Criteria */
+.criteria-list{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
+.crit-item{background:#fff;border:1px solid #f0e8e0;border-radius:10px;padding:12px 14px}
+.crit-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.crit-name{font-size:13px;font-weight:500;color:#1a1a1a}
+.crit-weight{font-size:11px;color:#D85A30;background:#fff7f2;padding:2px 8px;border-radius:999px}
+.crit-slider-row{display:flex;align-items:center;gap:10px}
+.crit-slider{flex:1;-webkit-appearance:none;height:4px;border-radius:2px;background:#f0e8e0;cursor:pointer}
+.crit-slider::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:#D85A30;cursor:pointer}
+.crit-slider::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:#D85A30;border:none;cursor:pointer}
+.crit-val{font-size:14px;font-weight:600;color:#D85A30;min-width:18px;text-align:right}
+.crit-desc{font-size:11px;color:#aaa;margin-top:4px}
+/* Remark */
+.remark-area{width:100%;padding:10px;border:1px solid #e8e4dc;border-radius:8px;font-size:13px;font-family:'Sarabun',sans-serif;resize:vertical;min-height:72px;color:#1a1a1a;margin-bottom:20px}
+.remark-area:focus{outline:none;border-color:#D85A30}
+/* Submit */
+.submit-btn{width:100%;padding:12px;background:#D85A30;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:600;font-family:'Sarabun',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:background 0.15s}
+.submit-btn:hover{background:#993C1D}
+.submit-btn:disabled{background:#ccc;cursor:not-allowed}
+/* Result panel */
+.result-panel{background:#fff;border-left:1px solid #f0e8e0;padding:20px;display:flex;flex-direction:column;gap:16px;overflow-y:auto}
+.score-top{text-align:center;padding:16px 0 8px}
+.score-ring{width:96px;height:96px;border-radius:50%;border:4px solid #f0e8e0;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 10px;position:relative;transition:border-color 0.3s}
+.score-ring.high{border-color:#639922}
+.score-ring.mid{border-color:#EF9F27}
+.score-ring.low{border-color:#E24B4A}
+.score-big{font-size:28px;font-weight:700;color:#1a1a1a}
+.score-max{font-size:11px;color:#aaa}
+.verdict-pill{display:inline-block;padding:4px 16px;border-radius:999px;font-size:12px;font-weight:600;margin-top:2px}
+.verdict-approved{background:#EAF3DE;color:#27500A}
+.verdict-conditional{background:#FAEEDA;color:#633806}
+.verdict-rejected{background:#FCEBEB;color:#791F1F}
+/* Breakdown */
+.breakdown{background:#f9f7f4;border-radius:10px;padding:12px 14px}
+.breakdown-title{font-size:11px;font-weight:600;color:#888;margin-bottom:10px;letter-spacing:0.04em}
+.breakdown-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.breakdown-label{font-size:12px;color:#555;flex:1}
+.breakdown-bar{flex:2;height:5px;background:#e8e4dc;border-radius:3px;margin:0 10px;overflow:hidden}
+.breakdown-fill{height:100%;background:#D85A30;border-radius:3px;transition:width 0.4s}
+.breakdown-score{font-size:12px;font-weight:600;color:#D85A30;min-width:28px;text-align:right}
+/* Radar */
+.chart-wrap{position:relative;height:200px}
+/* AI box */
+.ai-section{background:#fff7f2;border:1px solid #f0c5a0;border-radius:10px;padding:14px}
+.ai-header{display:flex;align-items:center;gap:6px;margin-bottom:8px}
+.ai-dot{width:8px;height:8px;border-radius:50%;background:#D85A30;animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+.ai-dot.done{animation:none;background:#639922}
+.ai-label{font-size:12px;font-weight:600;color:#993C1D}
+.ai-text{font-size:13px;color:#4A1B0C;line-height:1.7}
+.ai-placeholder{font-size:12px;color:#aaa;font-style:italic}
+/* Export */
+.export-row{display:flex;gap:8px}
+.exp-btn{flex:1;padding:8px;border:1px solid #e8e4dc;border-radius:8px;font-size:12px;font-family:'Sarabun',sans-serif;color:#555;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;transition:all 0.15s}
+.exp-btn:hover{border-color:#D85A30;color:#D85A30}
+/* History tab */
+#page-history{display:none}
+.history-empty{text-align:center;padding:60px 20px;color:#aaa;font-size:14px}
+.hist-card{background:#fff;border:1px solid #f0e8e0;border-radius:10px;padding:14px;margin-bottom:10px;cursor:pointer}
+.hist-card:hover{border-color:#D85A30}
+.hist-top{display:flex;justify-content:space-between;align-items:flex-start}
+.hist-name{font-size:14px;font-weight:600;color:#1a1a1a}
+.hist-date{font-size:11px;color:#aaa}
+.hist-score{font-size:20px;font-weight:700;color:#D85A30}
+/* Compare tab */
+#page-compare{display:none;padding:24px}
+.compare-empty{text-align:center;padding:60px 20px;color:#aaa;font-size:14px}
+.compare-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.compare-card{background:#fff;border:1px solid #f0e8e0;border-radius:10px;padding:14px;text-align:center}
+.compare-name{font-size:13px;font-weight:600;color:#1a1a1a;margin-bottom:4px}
+.compare-score{font-size:26px;font-weight:700;color:#D85A30}
+.compare-verdict{font-size:11px;margin-top:4px}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">
+    <div class="brand-icon">📊</div>
+    <div>
+      <div class="brand-name">SupplierEval Pro</div>
+      <div class="brand-sub">AI-Powered Supplier Scoring</div>
+    </div>
+  </div>
+  <div class="nav">
+    <button class="nav-btn active" onclick="showPage('eval')">ประเมินใหม่</button>
+    <button class="nav-btn" onclick="showPage('history')">ประวัติ (<span id="hist-count">0</span>)</button>
+    <button class="nav-btn" onclick="showPage('compare')">เปรียบเทียบ</button>
+  </div>
+</div>
+
+<div class="settings-bar">
+  <label>🔑 Anthropic API Key:</label>
+  <input type="password" id="api-key" placeholder="sk-ant-..." oninput="checkKey()" />
+  <span class="key-status key-no" id="key-status">ยังไม่ได้ใส่ key — AI จะใช้ข้อความตัวอย่างแทน</span>
+</div>
+
+<!-- Page: Eval -->
+<div id="page-eval">
+<div class="main">
+  <div class="form-panel">
+    <div class="panel-title">
+      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      ข้อมูล Supplier
+    </div>
+    <div class="info-grid">
+      <div class="field"><label>ชื่อบริษัท / Supplier</label><input type="text" id="f-name" placeholder="เช่น บ.ไทยโลจิสติกส์ จำกัด" /></div>
+      <div class="field"><label>ประเภท Supplier</label>
+        <select id="f-type">
+          <option>3PL / ขนส่ง</option>
+          <option>ผู้ผลิต / วัตถุดิบ</option>
+          <option>คลังสินค้า / Warehouse</option>
+          <option>ผู้ให้บริการ IT / Software</option>
+          <option>อื่นๆ</option>
+        </select>
+      </div>
+      <div class="field"><label>ประเทศ</label><input type="text" id="f-country" placeholder="ไทย" /></div>
+      <div class="field"><label>ปีที่เริ่มร่วมงาน</label><input type="number" id="f-year" placeholder="2022" min="2000" max="2030" /></div>
+    </div>
+
+    <div class="panel-title">
+      <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      เกณฑ์การประเมิน
+    </div>
+    <div class="criteria-list" id="criteria-list"></div>
+
+    <div class="panel-title">
+      <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      หมายเหตุเพิ่มเติม
+    </div>
+    <textarea class="remark-area" id="f-remark" placeholder="บันทึกข้อสังเกตหรือเงื่อนไขพิเศษของ Supplier รายนี้..."></textarea>
+
+    <button class="submit-btn" id="submit-btn" onclick="evaluate()">
+      <span>🤖</span> ประเมินและให้ AI วิเคราะห์
+    </button>
+  </div>
+
+  <div class="result-panel">
+    <div class="score-top">
+      <div class="score-ring" id="score-ring">
+        <div class="score-big" id="score-display">—</div>
+        <div class="score-max">/ 100</div>
+      </div>
+      <div id="verdict-display" style="margin-top:6px"></div>
+    </div>
+
+    <div class="breakdown" id="breakdown-section">
+      <div class="breakdown-title">คะแนนแต่ละเกณฑ์</div>
+      <div id="breakdown-rows"></div>
+    </div>
+
+    <div class="chart-wrap">
+      <canvas id="radar-chart"></canvas>
+    </div>
+
+    <div class="ai-section">
+      <div class="ai-header">
+        <div class="ai-dot" id="ai-dot"></div>
+        <div class="ai-label">AI Analysis โดย Claude</div>
+      </div>
+      <div id="ai-output"><div class="ai-placeholder">กด "ประเมินและให้ AI วิเคราะห์" เพื่อรับผลวิเคราะห์</div></div>
+    </div>
+
+    <div class="export-row">
+      <button class="exp-btn" onclick="exportTxt()">📄 Export .txt</button>
+      <button class="exp-btn" onclick="exportCSV()">📊 Export .csv</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- Page: History -->
+<div id="page-history" style="padding:24px">
+  <div style="font-size:15px;font-weight:600;color:#1a1a1a;margin-bottom:16px">ประวัติการประเมิน</div>
+  <div id="history-list"></div>
+</div>
+
+<!-- Page: Compare -->
+<div id="page-compare">
+  <div style="font-size:15px;font-weight:600;color:#1a1a1a;margin-bottom:16px">เปรียบเทียบ Supplier</div>
+  <div id="compare-grid" class="compare-grid"></div>
+</div>
+
+<script>
+const CRITERIA = [
+  {key:'price',   name:'ราคา / ต้นทุน',         weight:20, desc:'ความสามารถแข่งขันด้านราคา'},
+  {key:'quality', name:'คุณภาพสินค้า/บริการ',   weight:25, desc:'มาตรฐานและความสม่ำเสมอ'},
+  {key:'delivery',name:'ตรงเวลา / On-time',      weight:20, desc:'ความน่าเชื่อถือในการส่งมอบ'},
+  {key:'comms',   name:'การสื่อสาร',              weight:15, desc:'การตอบสนองและความโปร่งใส'},
+  {key:'flex',    name:'ความยืดหยุ่น',           weight:10, desc:'ปรับตัวตามความต้องการได้'},
+  {key:'cert',    name:'มาตรฐาน/ใบรับรอง',       weight:10, desc:'ISO, GMP, หรือใบรับรองอื่นๆ'},
+];
+
+let radarChart = null;
+let history = JSON.parse(localStorage.getItem('supplier_history') || '[]');
+
+function buildForm() {
+  const list = document.getElementById('criteria-list');
+  list.innerHTML = '';
+  CRITERIA.forEach(c => {
+    list.innerHTML += `
+    <div class="crit-item">
+      <div class="crit-top">
+        <div class="crit-name">${c.name}</div>
+        <div class="crit-weight">น้ำหนัก ${c.weight}%</div>
+      </div>
+      <div class="crit-slider-row">
+        <input type="range" class="crit-slider" id="sl-${c.key}" min="1" max="5" value="3"
+          oninput="document.getElementById('sv-${c.key}').textContent=this.value">
+        <div class="crit-val" id="sv-${c.key}">3</div>
+      </div>
+      <div class="crit-desc">${c.desc}</div>
+    </div>`;
+  });
+}
+
+function getScores() {
+  return CRITERIA.map(c => ({
+    ...c,
+    score: parseInt(document.getElementById('sl-'+c.key).value)
+  }));
+}
+
+function calcTotal(scores) {
+  return scores.reduce((sum, c) => sum + (c.score / 5) * c.weight, 0);
+}
+
+function getVerdict(total) {
+  if (total >= 75) return {text:'Approved — ผ่านเกณฑ์', cls:'verdict-approved', ring:'high'};
+  if (total >= 50) return {text:'Conditional — มีเงื่อนไข', cls:'verdict-conditional', ring:'mid'};
+  return {text:'Rejected — ไม่ผ่านเกณฑ์', cls:'verdict-rejected', ring:'low'};
+}
+
+function updateRadar(scores) {
+  const ctx = document.getElementById('radar-chart').getContext('2d');
+  if (radarChart) radarChart.destroy();
+  radarChart = new Chart(ctx, {
+    type: 'radar',
+    data: {
+      labels: scores.map(c => c.name),
+      datasets: [{
+        label: document.getElementById('f-name').value || 'Supplier',
+        data: scores.map(c => c.score),
+        backgroundColor: 'rgba(216,90,48,0.15)',
+        borderColor: '#D85A30',
+        borderWidth: 2,
+        pointBackgroundColor: '#D85A30',
+        pointRadius: 4,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      scales: { r: { min: 0, max: 5, ticks: { stepSize: 1, font: { size: 10 } }, pointLabels: { font: { size: 11 } } } },
+      plugins: { legend: { display: false } }
+    }
+  });
+}
+
+function updateBreakdown(scores) {
+  const rows = document.getElementById('breakdown-rows');
+  rows.innerHTML = scores.map(c => `
+    <div class="breakdown-row">
+      <div class="breakdown-label">${c.name}</div>
+      <div class="breakdown-bar"><div class="breakdown-fill" style="width:${(c.score/5)*100}%"></div></div>
+      <div class="breakdown-score">${c.score}/5</div>
+    </div>`).join('');
+}
+
+async function evaluate() {
+  const name = document.getElementById('f-name').value.trim() || 'Supplier ไม่ระบุชื่อ';
+  const type = document.getElementById('f-type').value;
+  const country = document.getElementById('f-country').value.trim() || 'ไม่ระบุ';
+  const remark = document.getElementById('f-remark').value.trim();
+  const scores = getScores();
+  const total = Math.round(calcTotal(scores));
+  const verdict = getVerdict(total);
+
+  document.getElementById('score-display').textContent = total;
+  const ring = document.getElementById('score-ring');
+  ring.className = 'score-ring ' + verdict.ring;
+  document.getElementById('verdict-display').innerHTML =
+    `<span class="verdict-pill ${verdict.cls}">${verdict.text}</span>`;
+
+  updateBreakdown(scores);
+  updateRadar(scores);
+
+  const dot = document.getElementById('ai-dot');
+  dot.className = 'ai-dot';
+  document.getElementById('ai-output').innerHTML = '<div class="ai-placeholder">⏳ AI กำลังวิเคราะห์...</div>';
+
+  const scoreText = scores.map(c => `${c.name}: ${c.score}/5 (น้ำหนัก ${c.weight}%)`).join('\n');
+  const prompt = `คุณคือผู้เชี่ยวชาญ Supply Chain และการประเมิน Supplier
+วิเคราะห์ผลประเมิน Supplier ต่อไปนี้เป็นภาษาไทย กระชับ 3-4 ประโยค:
+
+ชื่อ: ${name}
+ประเภท: ${type} | ประเทศ: ${country}
+คะแนนรวม: ${total}/100 (${verdict.text})
+
+คะแนนแต่ละเกณฑ์:
+${scoreText}
+${remark ? '\nหมายเหตุ: ' + remark : ''}
+
+โปรดระบุ: (1) จุดแข็งที่โดดเด่น (2) จุดที่ต้องพัฒนา (3) คำแนะนำ action ถัดไปสั้นๆ`;
+
+  let aiText = '';
+  const apiKey = document.getElementById('api-key').value.trim();
+
+  if (apiKey && apiKey.startsWith('sk-ant-')) {
+    try {
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': apiKey,
+          'anthropic-version': '2023-06-01',
+          'anthropic-dangerous-direct-browser-access': 'true'
+        },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-6',
+          max_tokens: 400,
+          messages: [{ role: 'user', content: prompt }]
+        })
+      });
+      const data = await res.json();
+      aiText = data.content?.[0]?.text || 'ไม่สามารถรับผลจาก AI ได้';
+    } catch(e) {
+      aiText = '⚠️ เชื่อมต่อ API ไม่ได้ กรุณาตรวจสอบ API Key และการเชื่อมต่ออินเทอร์เน็ต';
+    }
+  } else {
+    const weakItems = scores.filter(c => c.score <= 3).map(c => c.name);
+    const strongItems = scores.filter(c => c.score >= 4).map(c => c.name);
+    aiText = `[ตัวอย่าง — ใส่ API Key เพื่อรับผลวิเคราะห์จาก Claude จริงๆ]\n\n` +
+      `${name} ได้คะแนนรวม ${total}/100 อยู่ในระดับ "${verdict.text}" ` +
+      (strongItems.length ? `จุดแข็งที่โดดเด่นคือด้าน${strongItems.join(' และ')} ` : '') +
+      (weakItems.length ? `แต่ควรพัฒนาด้าน${weakItems.join(' และ')} ให้ดีขึ้น ` : '') +
+      `แนะนำให้จัดประชุม Business Review กับ Supplier เพื่อวางแผนพัฒนาร่วมกันในไตรมาสถัดไป`;
+  }
+
+  dot.className = 'ai-dot done';
+  document.getElementById('ai-output').innerHTML =
+    `<div class="ai-text">${aiText.replace(/\n/g,'<br>')}</div>`;
+
+  const record = { name, type, country, total, verdict: verdict.text, scores, aiText, date: new Date().toLocaleDateString('th-TH'), remark };
+  history.unshift(record);
+  localStorage.setItem('supplier_history', JSON.stringify(history));
+  document.getElementById('hist-count').textContent = history.length;
+}
+
+function exportTxt() {
+  const name = document.getElementById('f-name').value || 'Supplier';
+  const scores = getScores();
+  const total = Math.round(calcTotal(scores));
+  const ai = document.getElementById('ai-output').innerText;
+  const lines = [
+    `SupplierEval Pro — รายงานผลประเมิน`,
+    `วันที่: ${new Date().toLocaleDateString('th-TH')}`,
+    `Supplier: ${name}`,
+    `ประเภท: ${document.getElementById('f-type').value}`,
+    `ประเทศ: ${document.getElementById('f-country').value || '-'}`,
+    '',
+    `คะแนนรวม: ${total}/100`,
+    `ผลประเมิน: ${getVerdict(total).text}`,
+    '',
+    'คะแนนแต่ละเกณฑ์:',
+    ...scores.map(c => `  ${c.name}: ${c.score}/5 (น้ำหนัก ${c.weight}%)`),
+    '',
+    'AI Analysis:',
+    ai,
+  ];
+  const blob = new Blob([lines.join('\n')], {type:'text/plain;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `supplier_eval_${name.replace(/\s/g,'_')}.txt`;
+  a.click();
+}
+
+function exportCSV() {
+  const name = document.getElementById('f-name').value || 'Supplier';
+  const scores = getScores();
+  const total = Math.round(calcTotal(scores));
+  const rows = [
+    ['ชื่อ Supplier','ประเภท','ประเทศ','คะแนนรวม','ผลประเมิน',...scores.map(c=>c.name),'วันที่'],
+    [name, document.getElementById('f-type').value, document.getElementById('f-country').value||'-',
+      total, getVerdict(total).text, ...scores.map(c=>c.score), new Date().toLocaleDateString('th-TH')]
+  ];
+  const csv = rows.map(r => r.join(',')).join('\n');
+  const blob = new Blob(['\ufeff'+csv], {type:'text/csv;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `supplier_eval_${name.replace(/\s/g,'_')}.csv`;
+  a.click();
+}
+
+function showPage(page) {
+  ['eval','history','compare'].forEach(p => {
+    const el = document.getElementById('page-'+p);
+    if (el) el.style.display = p === page ? (p==='eval'?'block':'block') : 'none';
+  });
+  document.querySelectorAll('.nav-btn').forEach((b,i) => {
+    b.classList.toggle('active', ['eval','history','compare'][i] === page);
+  });
+  if (page === 'history') renderHistory();
+  if (page === 'compare') renderCompare();
+}
+
+function renderHistory() {
+  const list = document.getElementById('history-list');
+  if (!history.length) { list.innerHTML = '<div class="history-empty">ยังไม่มีประวัติการประเมิน<br>กด "ประเมินใหม่" เพื่อเริ่มต้น</div>'; return; }
+  list.innerHTML = history.map((r,i) => `
+    <div class="hist-card" onclick="loadRecord(${i})">
+      <div class="hist-top">
+        <div>
+          <div class="hist-name">${r.name}</div>
+          <div style="font-size:12px;color:#aaa;margin-top:2px">${r.type} · ${r.country} · ${r.date}</div>
+        </div>
+        <div>
+          <div class="hist-score">${r.total}</div>
+          <div style="font-size:10px;text-align:right;color:#aaa">/ 100</div>
+        </div>
+      </div>
+      <div style="margin-top:8px"><span class="verdict-pill ${r.total>=75?'verdict-approved':r.total>=50?'verdict-conditional':'verdict-rejected'}">${r.verdict}</span></div>
+    </div>`).join('');
+}
+
+function renderCompare() {
+  const grid = document.getElementById('compare-grid');
+  if (!history.length) { grid.innerHTML = '<div class="compare-empty">ยังไม่มีข้อมูลเปรียบเทียบ</div>'; return; }
+  grid.innerHTML = history.map(r => `
+    <div class="compare-card">
+      <div class="compare-name">${r.name}</div>
+      <div style="font-size:11px;color:#aaa;margin-bottom:8px">${r.type}</div>
+      <div class="compare-score">${r.total}</div>
+      <div class="compare-verdict"><span class="verdict-pill ${r.total>=75?'verdict-approved':r.total>=50?'verdict-conditional':'verdict-rejected'}" style="font-size:10px">${r.verdict}</span></div>
+      ${r.scores.map(c=>`<div style="display:flex;justify-content:space-between;font-size:11px;color:#888;margin-top:4px"><span>${c.name}</span><span style="color:#D85A30;font-weight:600">${c.score}/5</span></div>`).join('')}
+    </div>`).join('');
+}
+
+function loadRecord(i) {
+  const r = history[i];
+  showPage('eval');
+  document.getElementById('f-name').value = r.name;
+  document.getElementById('f-type').value = r.type;
+  document.getElementById('f-country').value = r.country;
+  if (r.remark) document.getElementById('f-remark').value = r.remark;
+  r.scores.forEach(c => {
+    const sl = document.getElementById('sl-'+c.key);
+    const sv = document.getElementById('sv-'+c.key);
+    if (sl && sv) { sl.value = c.score; sv.textContent = c.score; }
+  });
+}
+
+function checkKey() {
+  const key = document.getElementById('api-key').value.trim();
+  const st = document.getElementById('key-status');
+  if (key.startsWith('sk-ant-')) {
+    st.className = 'key-status key-ok';
+    st.textContent = '✓ API Key พร้อมใช้งาน — AI จะวิเคราะห์จาก Claude จริงๆ';
+  } else {
+    st.className = 'key-status key-no';
+    st.textContent = 'ยังไม่ได้ใส่ key — AI จะใช้ข้อความตัวอย่างแทน';
+  }
+}
+
+buildForm();
+document.getElementById('hist-count').textContent = history.length;
+</script>
+</body>
+</html>
