@@ -276,22 +276,22 @@ var CRIT=[
   {key:'cert',    name:'มาตรฐาน/ใบรับรอง',     wt:10,desc:'ISO, GMP หรือใบรับรองอื่นๆ'},
 ];
 var CFG={approved:75,conditional:50,dealbreaker:true,org:'',dept:'',logo:'SPU'};
-var history=[];
+var evalHistory=[];
 var cmpSel=[];
 var lastResult=null;
 
-try{history=JSON.parse(localStorage.getItem('se_history')||'[]');}catch(e){}
+try{evalHistory=JSON.parse(localStorage.getItem("se_history")||"[]");}catch(e){}
 try{var _c=JSON.parse(localStorage.getItem('se_cfg')||'{}');Object.assign(CFG,_c);}catch(e){}
 updateHistCount();
 
 function updateHistCount(){
-  var n=history.length;
+  var n=evalHistory.length;
   document.getElementById('hist-count').textContent=n;
   var el2=document.getElementById('hist-count2');
   if(el2)el2.textContent=n;
 }
 
-function saveLS(){try{localStorage.setItem('se_history',JSON.stringify(history));}catch(e){}}
+function saveLS(){try{localStorage.setItem('se_history',JSON.stringify(evalHistory));}catch(e){}}
 
 function toast(msg){
   var t=document.getElementById('toast');
@@ -441,7 +441,7 @@ async function runEval(){
 
 function saveRecord(){
   if(!lastResult){alert('กด "ประเมิน AI" ก่อนนะครับ');return;}
-  history.unshift(lastResult);
+  evalHistory.unshift(lastResult);
   saveLS();
   updateHistCount();
   document.getElementById('save-rec-btn').className='save-rec-btn';
@@ -460,11 +460,11 @@ function checkKey(){
 function renderHistory(){
   var el=document.getElementById('hist-list');
   updateHistCount();
-  if(!history.length){
+  if(!evalHistory.length){
     el.innerHTML='<div class="empty-msg">ยังไม่มีประวัติ<br><br>1. กรอกข้อมูล Supplier<br>2. กด "🤖 ประเมิน AI"<br>3. กด "💾 บันทึกลงประวัติ"<br><br>ประวัติจะขึ้นที่นี่ครับ 😊</div>';
     return;
   }
-  el.innerHTML=history.map(function(r,i){
+  el.innerHTML=evalHistory.map(function(r,i){
     var vc=r.total>=CFG.approved?'v-approved':r.total>=CFG.conditional?'v-conditional':'v-rejected';
     var isSel=cmpSel.indexOf(i)>=0;
     return'<div class="hist-card" id="hcard-'+i+'">'+
@@ -495,19 +495,19 @@ function toggleCmp(i){
 }
 
 function delRec(i){
-  if(!confirm('ลบ "'+history[i].name+'" ออกจากประวัติ?'))return;
-  history.splice(i,1);saveLS();
+  if(!confirm('ลบ "'+evalHistory[i].name+'" ออกจากประวัติ?'))return;
+  evalHistory.splice(i,1);saveLS();
   cmpSel=cmpSel.filter(function(x){return x!==i;}).map(function(x){return x>i?x-1:x;});
   updateHistCount();renderHistory();
 }
 
 function clearAll(){
   if(!confirm('ลบประวัติทั้งหมด? ไม่สามารถกู้คืนได้'))return;
-  history=[];cmpSel=[];saveLS();updateHistCount();renderHistory();
+  evalHistory=[];cmpSel=[];saveLS();updateHistCount();renderHistory();
 }
 
 function loadRec(i){
-  var r=history[i];showPage('eval');
+  var r=evalHistory[i];showPage('eval');
   document.getElementById('f-name').value=r.name||'';
   document.getElementById('f-type').value=r.type||'3PL / ขนส่ง';
   document.getElementById('f-country').value=r.country||'';
@@ -524,12 +524,12 @@ function loadRec(i){
 /* ===== COMPARE ===== */
 function renderCompare(){
   var toolbar=document.getElementById('cmp-toolbar'),content=document.getElementById('cmp-content');
-  if(!history.length){
+  if(!evalHistory.length){
     toolbar.innerHTML='';
     content.innerHTML='<div class="empty-msg">ยังไม่มีประวัติ<br>ประเมินและบันทึก Supplier ก่อนนะครับ 😊</div>';
     return;
   }
-  var sel=cmpSel.length>0?cmpSel.map(function(i){return history[i];}):history.slice(0,Math.min(5,history.length));
+  var sel=cmpSel.length>0?cmpSel.map(function(i){return evalHistory[i];}):evalHistory.slice(0,Math.min(5,evalHistory.length));
   toolbar.innerHTML='<span style="font-size:12px;color:#888">แสดง '+sel.length+' บริษัท '+(cmpSel.length===0?'(อัตโนมัติ 5 รายแรก)':'')+'</span>'+
     '<button onclick="showPage(\'history\')" style="padding:5px 12px;border:1px solid #D85A30;border-radius:6px;font-size:12px;color:#D85A30;background:#fff;cursor:pointer;font-family:Sarabun,sans-serif">เลือกจากประวัติ</button>'+
     (cmpSel.length>0?'<button onclick="cmpSel=[];renderCompare()" style="padding:5px 12px;border:1px solid #e0dbd4;border-radius:6px;font-size:12px;color:#888;background:#fff;cursor:pointer;font-family:Sarabun,sans-serif">ล้างการเลือก</button>':'');
@@ -673,8 +673,7 @@ function showPage(p){
   if(p==='settings')loadCfgUI();
 }
 
-  
-buildForm(); 
+buildForm();
 </script>
 </body>
 </html>
