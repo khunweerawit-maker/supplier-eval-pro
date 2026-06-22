@@ -218,7 +218,10 @@ body{font-family:'Sarabun',sans-serif;background:#f5f4f0;color:#1a1a1a;min-heigh
 </div>
 
 <div id="page-history">
-  <div class="pg-title">ประวัติการประเมิน (<span id="hist-count2">0</span> รายการ)</div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;flex-wrap:wrap;gap:8px">
+    <div class="pg-title">ประวัติการประเมิน (<span id="hist-count2">0</span> รายการ)</div>
+    <button onclick="loadDemo()" style="padding:7px 16px;background:#fff7f2;border:1px solid #f0c5a0;border-radius:8px;font-size:12px;font-weight:600;color:#993C1D;font-family:Sarabun,sans-serif;cursor:pointer">🎯 โหลด Demo Data (5 บริษัท)</button>
+  </div>
   <div class="pg-sub">กด "โหลดสู่ฟอร์ม" เพื่อดูรายละเอียด | กด "เลือกเทียบ" แล้วไปแท็บ "เปรียบเทียบ" | สูงสุด 5 รายการ</div>
   <div id="hist-list"></div>
 </div>
@@ -283,6 +286,79 @@ var lastResult=null;
 try{evalHistory=JSON.parse(localStorage.getItem("se_history")||"[]");}catch(e){}
 try{var _c=JSON.parse(localStorage.getItem('se_cfg')||'{}');Object.assign(CFG,_c);}catch(e){}
 updateHistCount();
+
+var DEMO_DATA=[
+  {
+    name:'บ.ไทยทรานสปอร์ต จำกัด',type:'3PL / ขนส่ง',country:'ไทย',total:82,
+    verdict:'Approved — ผ่านเกณฑ์',date:'20/6/2569',evaluator:'วีรวิชญ์ เลิศไทยตระกูล',position:'ผู้ช่วยคณบดี',
+    remark:'Supplier หลักที่ใช้มา 3 ปี ผลงานดีสม่ำเสมอ',db:false,
+    scores:[
+      {key:'price',   name:'ราคา / ต้นทุน',       wt:20,score:4,comment:'ราคาแข่งขันได้ดี ต่อรองได้ปีละครั้ง'},
+      {key:'quality', name:'คุณภาพสินค้า/บริการ', wt:25,score:5,comment:'ไม่เคยมี claim ตลอด 3 ปี มาตรฐานสูง'},
+      {key:'delivery',name:'ตรงเวลา / On-time',    wt:20,score:4,comment:'On-time 95% ล่าช้าบ้างช่วง peak season'},
+      {key:'comms',   name:'การสื่อสาร',            wt:15,score:4,comment:'ตอบสนองเร็ว มี Line group ติดตามงาน'},
+      {key:'flex',    name:'ความยืดหยุ่น',         wt:10,score:3,comment:'ปรับ route เพิ่มได้แต่ต้องแจ้ง 3 วัน'},
+      {key:'cert',    name:'มาตรฐาน/ใบรับรอง',     wt:10,score:5,comment:'มี ISO 9001 และ GDP certified'},
+    ],
+    aiText:'บ.ไทยทรานสปอร์ต มีจุดแข็งโดดเด่นด้านคุณภาพและมาตรฐาน ไม่เคยมีปัญหา claim ตลอด 3 ปี และมีใบรับรอง ISO ครบถ้วน ควรต่อสัญญาและพิจารณาเพิ่มปริมาณงานได้'
+  },
+  {
+    name:'EEC Logistics Co., Ltd.',type:'3PL / ขนส่ง',country:'ไทย',total:78,
+    verdict:'Approved — ผ่านเกณฑ์',date:'20/6/2569',evaluator:'วีรวิชญ์ เลิศไทยตระกูล',position:'ผู้ช่วยคณบดี',
+    remark:'Supplier ใหม่ในพื้นที่ EEC มีศักยภาพสูง',db:false,
+    scores:[
+      {key:'price',   name:'ราคา / ต้นทุน',       wt:20,score:5,comment:'ราคาต่ำกว่าตลาด 12% เหมาะกับ EEC route'},
+      {key:'quality', name:'คุณภาพสินค้า/บริการ', wt:25,score:4,comment:'คุณภาพดี แต่ยังใหม่ ต้องติดตามต่อ'},
+      {key:'delivery',name:'ตรงเวลา / On-time',    wt:20,score:4,comment:'On-time 92% ช่วง 6 เดือนแรก'},
+      {key:'comms',   name:'การสื่อสาร',            wt:15,score:3,comment:'ตอบสนองช้าบ้างช่วงกลางคืน'},
+      {key:'flex',    name:'ความยืดหยุ่น',         wt:10,score:4,comment:'รับงาน urgent ได้ดี flexible มาก'},
+      {key:'cert',    name:'มาตรฐาน/ใบรับรอง',     wt:10,score:4,comment:'มี ISO 9001 อยู่ระหว่างต่ออายุ'},
+    ],
+    aiText:'EEC Logistics มีจุดแข็งด้านราคาและความยืดหยุ่นที่โดดเด่น เหมาะกับงาน EEC เป็นพิเศษ แนะนำให้ทดลองเพิ่มสัดส่วนงานและติดตามผลใน 6 เดือนถัดไป'
+  },
+  {
+    name:'บ.สยามซัพพลาย จำกัด',type:'ผู้ผลิต / วัตถุดิบ',country:'ไทย',total:63,
+    verdict:'Conditional — มีเงื่อนไข',date:'21/6/2569',evaluator:'วีรวิชญ์ เลิศไทยตระกูล',position:'ผู้ช่วยคณบดี',
+    remark:'มีปัญหาการส่งมอบในไตรมาสที่แล้ว ต้องติดตามใกล้ชิด',db:false,
+    scores:[
+      {key:'price',   name:'ราคา / ต้นทุน',       wt:20,score:4,comment:'ราคาสมเหตุสมผล แต่มีการขึ้นราคา 2 ครั้งในปีนี้'},
+      {key:'quality', name:'คุณภาพสินค้า/บริการ', wt:25,score:3,comment:'พบ defect 3% ใน Q2 สูงกว่า SLA ที่กำหนด 1%'},
+      {key:'delivery',name:'ตรงเวลา / On-time',    wt:20,score:2,comment:'ส่งช้า 4 ครั้งใน Q3 กระทบ production line'},
+      {key:'comms',   name:'การสื่อสาร',            wt:15,score:4,comment:'แจ้งปัญหาล่วงหน้าเสมอ จุดแข็งที่ดี'},
+      {key:'flex',    name:'ความยืดหยุ่น',         wt:10,score:3,comment:'ปรับ order เพิ่มได้แต่ต้องใช้เวลา 1 สัปดาห์'},
+      {key:'cert',    name:'มาตรฐาน/ใบรับรอง',     wt:10,score:3,comment:'มี ISO แต่หมดอายุปีหน้า ยังไม่เริ่มต่ออายุ'},
+    ],
+    aiText:'บ.สยามซัพพลาย มีปัญหาด้านการตรงเวลาและคุณภาพที่ต้องแก้ไขเร่งด่วน แนะนำให้ทำ Supplier Development Plan ร่วมกันภายใน 30 วัน และกำหนด KPI ชัดเจนก่อนต่อสัญญา'
+  },
+  {
+    name:'Global Freight Asia',type:'3PL / ขนส่ง',country:'สิงคโปร์',total:55,
+    verdict:'Conditional — มีเงื่อนไข',date:'21/6/2569',evaluator:'วีรวิชญ์ เลิศไทยตระกูล',position:'ผู้ช่วยคณบดี',
+    remark:'ใช้สำหรับ international shipment เท่านั้น',db:false,
+    scores:[
+      {key:'price',   name:'ราคา / ต้นทุน',       wt:20,score:2,comment:'ราคาสูงกว่าตลาด 20% แต่ cover cross-border ได้'},
+      {key:'quality', name:'คุณภาพสินค้า/บริการ', wt:25,score:4,comment:'คุณภาพดี handling สินค้า fragile ได้ดีมาก'},
+      {key:'delivery',name:'ตรงเวลา / On-time',    wt:20,score:3,comment:'ขึ้นกับ customs clearance บางครั้งล่าช้า 1-2 วัน'},
+      {key:'comms',   name:'การสื่อสาร',            wt:15,score:3,comment:'ภาษาอังกฤษดี แต่ timezone ต่างกัน ตอบช้าช่วงเช้า'},
+      {key:'flex',    name:'ความยืดหยุ่น',         wt:10,score:4,comment:'มี network กว้าง ปรับ routing ข้ามประเทศได้'},
+      {key:'cert',    name:'มาตรฐานใบรับรอง',     wt:10,score:3,comment:'มาตรฐานสิงคโปร์ แต่ไม่มี Thai FDA cert'},
+    ],
+    aiText:'Global Freight Asia เหมาะสำหรับงาน international โดยเฉพาะ แต่ราคาสูงเกินไปสำหรับงาน domestic แนะนำให้ใช้เฉพาะ shipment ข้ามประเทศและเจรจาต่อรองราคาสำหรับ volume ที่สูงขึ้น'
+  },
+  {
+    name:'บ.ราคาถูกขนส่ง จำกัด',type:'3PL / ขนส่ง',country:'ไทย',total:38,
+    verdict:'Rejected — ไม่ผ่านเกณฑ์',date:'22/6/2569',evaluator:'วีรวิชญ์ เลิศไทยตระกูล',position:'ผู้ช่วยคณบดี',
+    remark:'ทดลองใช้ 3 เดือน พบปัญหาหนักมาก ไม่แนะนำต่อสัญญา',db:false,
+    scores:[
+      {key:'price',   name:'ราคา / ต้นทุน',       wt:20,score:5,comment:'ราคาถูกที่สุดในตลาด แต่ได้คุณภาพตามราคา'},
+      {key:'quality', name:'คุณภาพสินค้า/บริการ', wt:25,score:2,comment:'สินค้าเสียหาย 8% ใน 3 เดือนแรก สูงมาก'},
+      {key:'delivery',name:'ตรงเวลา / On-time',    wt:20,score:2,comment:'ส่งช้าเกือบทุก order เฉลี่ย 2-3 วัน'},
+      {key:'comms',   name:'การสื่อสาร',            wt:15,score:1,comment:'ไม่รับโทรศัพท์ ไม่ตอบ Line อาทิตย์ละครั้ง'},
+      {key:'flex',    name:'ความยืดหยุ่น',         wt:10,score:2,comment:'ปฏิเสธงาน urgent ทุกครั้ง ไม่ยืดหยุ่นเลย'},
+      {key:'cert',    name:'มาตรฐาน/ใบรับรอง',     wt:10,score:1,comment:'ไม่มีใบรับรองใดๆ เลย'},
+    ],
+    aiText:'บ.ราคาถูกขนส่ง ไม่ผ่านเกณฑ์ในหลายด้านสำคัญ โดยเฉพาะการสื่อสารและมาตรฐาน ไม่แนะนำให้ต่อสัญญาแม้ราคาจะถูกที่สุด เพราะความเสียหายและ delay ส่งผลกระทบต่อธุรกิจมากกว่าเงินที่ประหยัดได้'
+  }
+];
 
 function updateHistCount(){
   var n=evalHistory.length;
@@ -501,6 +577,17 @@ function delRec(i){
   updateHistCount();renderHistory();
 }
 
+function loadDemo(){
+  if(evalHistory.length>0){
+    if(!confirm('โหลด Demo Data จะเพิ่ม 5 บริษัทตัวอย่างเข้าประวัติ ดำเนินการต่อไหมครับ?')) return;
+  }
+  var today=new Date().toLocaleDateString("th-TH");
+  DEMO_DATA.forEach(function(d){d.date=today;});
+  evalHistory=DEMO_DATA.slice().concat(evalHistory);
+  saveLS();updateHistCount();renderHistory();
+  toast("✓ โหลด Demo Data 5 บริษัทเรียบร้อยแล้ว");
+}
+
 function clearAll(){
   if(!confirm('ลบประวัติทั้งหมด? ไม่สามารถกู้คืนได้'))return;
   evalHistory=[];cmpSel=[];saveLS();updateHistCount();renderHistory();
@@ -508,17 +595,31 @@ function clearAll(){
 
 function loadRec(i){
   var r=evalHistory[i];showPage('eval');
+  // กรอก form
   document.getElementById('f-name').value=r.name||'';
   document.getElementById('f-type').value=r.type||'3PL / ขนส่ง';
   document.getElementById('f-country').value=r.country||'';
   document.getElementById('f-year').value=r.year||'';
-  if(r.remark)document.getElementById('f-remark').value=r.remark;
-  if(r.evaluator)document.getElementById('f-evaluator').value=r.evaluator;
-  if(r.position)document.getElementById('f-position').value=r.position;
+  document.getElementById('f-remark').value=r.remark||'';
+  document.getElementById('f-evaluator').value=r.evaluator||'';
+  document.getElementById('f-position').value=r.position||'';
   r.scores.forEach(function(c){
     var sl=document.getElementById('sl-'+c.key),sv=document.getElementById('sv-'+c.key),cm=document.getElementById('cm-'+c.key);
-    if(sl)sl.value=c.score;if(sv)sv.textContent=c.score;if(cm&&c.comment)cm.value=c.comment;
+    if(sl)sl.value=c.score;if(sv)sv.textContent=c.score;if(cm)cm.value=c.comment||'';
   });
+  // render ผลลัพธ์ฝั่งขวาด้วย
+  var verdict=getVerdict(r.total,r.scores);
+  document.getElementById('score-num').textContent=r.total;
+  document.getElementById('score-ring').className='score-ring '+verdict.ring;
+  document.getElementById('verdict-wrap').innerHTML='<span class="v-pill '+verdict.cls+'">'+r.verdict+'</span>';
+  document.getElementById('db-warn').style.display=r.db?'block':'none';
+  document.getElementById('save-hint').style.display='none';
+  updateBK(r.scores);
+  drawRadar(r.scores);
+  document.getElementById('ai-dot').className='ai-dot done';
+  document.getElementById('ai-out').innerHTML='<div class="ai-text">'+(r.aiText||'').replace(/\n/g,'<br>')+'</div>';
+  document.getElementById('save-rec-btn').className='save-rec-btn';
+  lastResult=null;
 }
 
 /* ===== COMPARE ===== */
